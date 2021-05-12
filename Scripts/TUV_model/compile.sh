@@ -1,0 +1,1 @@
+gfortran tuv_rosario.f functs.f grids.f la_srb.f newlst.f numer.f odo3.f odrl.f orbit.f qys.f rdetfl.f rdinp.f rdxs.f rtrans.f rxn.f savoutNA.f setaer.f setalb.f setcld.f setno2.f seto2.f setsnw.f setso2.f sphers.f swbiol.f swchem.f swdom.f swphys.f terint.f vpair.f vpo3.f vptmp.f waters.f wrflut.f wshift.f -o tuv_rosario.out
