@@ -134,6 +134,10 @@ class TUV_model:
             self.data_measurement = self.data[date]
             if self.data_measurement != 0:
                 print("{}".format(date))
+                print("\t{}\t{}\t{}\t{}".format("RD",
+                                                "AOD",
+                                                "Davis",
+                                                "TUV"))
                 run = self.initialize_search()
                 self.obtain_hour_and_minute(date)
                 while run:
@@ -143,10 +147,10 @@ class TUV_model:
                     Results.read_results()
                     RD = calculate_RD(self.data_measurement,
                                       Results.data[self.minute])
-                    print("\t{:3.2f} {:.3f} {:2.3f} {}".format(RD,
-                                                               self.aod,
-                                                               self.data_measurement,
-                                                               Results.data[self.minute]))
+                    print("\t{:.2f}\t{:.3f}\t{:.3f}\t{:.3f}".format(RD,
+                                                                    self.aod,
+                                                                    self.data_measurement,
+                                                                    Results.data[self.minute]))
                     run = self.aod_binary_search(RD, run)
             else:
                 pass
