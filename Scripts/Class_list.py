@@ -1,5 +1,7 @@
 from functions import *
 import pandas as pd
+import numpy as np
+import os
 pd.options.mode.chained_assignment = None
 
 
@@ -107,3 +109,95 @@ class OMI_data:
         self.data = cut_data_from_date_period(self.data,
                                               self.day_initial,
                                               self.day_final)
+
+
+class TUV_model:
+    def __init__(self, path_results, date, ozone, data, aod_i, aod_f, RD, delta_RD):
+        self.path_results = path_results
+        self.delta_RD = delta_RD
+        self.ozone = ozone
+        self.aod_i = aod_i
+        self.aod_f = aod_f
+        self.data = data
+        self.date = date
+        self.RD = RD
+        self.obtain_yymmdd_from_date()
+
+    def obtain_yymmdd_from_date(self):
+        self.outfile, self.year, self.month, self.day = date_to_yymmdd(
+            self.date)
+
+    def run(self):
+        Results = TUV_Results(self.path_results,
+                              self.outfile)
+        for date in self.data.index:
+            self.data_measurement = self.data[date]
+            if self.data_measurement != 0:
+                print("{}".format(date))
+                run = self.initialize_search()
+                self.obtain_hour_and_minute(date)
+                while run:
+                    self.obtain_aod()
+                    self.create_TUV_input()
+                    os.system("./TUV_model/tuv_rosario.out")
+                    Results.read_results()
+                    RD = calculate_RD(self.data_measurement,
+                                      Results.data[self.minute])
+                    print("\t{:3.2f} {:.3f} {:2.3f} {}".format(RD,
+                                                               self.aod,
+                                                               self.data_measurement,
+                                                               Results.data[self.minute]))
+                    run = self.aod_binary_search(RD, run)
+            else:
+                pass
+
+    def initialize_search(self):
+        self.aod_i_n = self.aod_i
+        self.aod_f_n = self.aod_f
+        run = True
+        return run
+
+    def obtain_hour_and_minute(self, date):
+        self.hour_i = date.hour+60/60
+        self.hour_f = self.hour_i+1
+        self.minute = date.minute//5
+
+    def aod_binary_search(self, RD, run):
+        if RD > self.RD+self.delta_RD:
+            self.aod_i_n = self.aod
+        elif RD < self.RD-self.delta_RD:
+            self.aod_f_n = self.aod
+        else:
+            run = False
+        return run
+
+    def obtain_aod(self):
+        self.aod = (self.aod_i_n+self.aod_f_n)/2
+
+    def create_TUV_input(self):
+        input_file = open("TUV_input.txt",
+                          "w")
+        input_file.write("{} {} {} 20{} {} {} {} {}".format(self.outfile,
+                                                            self.ozone,
+                                                            self.aod,
+                                                            self.year,
+                                                            self.month,
+                                                            self.day,
+                                                            self.hour_i,
+                                                            self.hour_f))
+        input_file.close()
+
+
+class TUV_Results:
+    def __init__(self, path, name):
+        self.path = path
+        self.name = name
+
+    def read_results(self):
+        skiprows = 132
+        self.hours, self.data = np.loadtxt("{}{}.txt".format(self.path,
+                                                             self.name),
+                                           skiprows=skiprows,
+                                           max_rows=13,
+                                           usecols=[0, 2],
+                                           unpack=True)

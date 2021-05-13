@@ -246,8 +246,8 @@ c      OPEN(UNIT=kout,FILE='tuvlog',STATUS='UNKNOWN')
          iout = 30
       ENDIF
 !Se llama al archivo que contiene todos los parametros de cada dia
-      open(13,file="../TUV_input.txt")
-       read(13,*) outfil,o3_tc,iyear,imonth,iday,tstart,tstop
+      open(13,file="TUV_input.txt")
+       read(13,*) outfil,o3_tc,tauaer,iyear,imonth,iday,tstart,tstop
 * ___ SECTION 2: SET GRIDS _________________________________________________
 
 * altitudes (creates altitude grid, locates index for selected output, izout)

@@ -1,7 +1,6 @@
 *=============================================================================*
 
-      SUBROUTINE vpair(psurf, nz, z,
-     $     con, col)
+      SUBROUTINE vpair(psurf,nz,z,con,col)
 
 *-----------------------------------------------------------------------------*
 *=  NAME:  Vertial Profile of AIR
@@ -25,19 +24,19 @@
       IMPLICIT NONE
       INCLUDE 'params'
 
-      INTEGER kdata
-      PARAMETER(kdata=150)
+      integer kdata
+      parameter(kdata=150)
 
 ********* input:
     
       REAL z(kz)
-      INTEGER nz
+      integer nz
 
       REAL  psurf
 
 * specified air profile data:
-      INTEGER nd
-      REAL zd(kdata), air(kdata)
+      integer nd
+      REAL zd(kdata),air(kdata)
       REAL hscale
       REAL cd(kdata)
 
@@ -51,11 +50,11 @@
       REAL scale
       REAL pold
       REAL pconv
-      PARAMETER(pconv = 980.665 * 1.E-3 * 28.9644 / 6.022169E23)
+      parameter(pconv = 980.665 * 1.E-3 * 28.9644 / 6.022169E23)
 
 * other:
-      INTEGER i
-      REAL airlog(kz), conlog(kz)
+      integer i
+      REAL airlog(kz),conlog(kz)
 
 
 * External functions:
@@ -76,22 +75,22 @@
 
 * _________SECTION 1:  Read in vertical profile of concentration
 
-      WRITE(kout,*) 'air concentrations: USSA, 1976'
+      WRITE(kout,*) 'air concentrations: USSA,1976'
 
       OPEN(kin,FILE='DATAE1/ATM/ussa.dens',STATUS='old')
-      DO i = 1, 3
+      DO i = 1,3
          READ(kin,*)
       ENDDO
       nd = 1
  4    CONTINUE
-        READ(kin,*,END=5) zd(nd), air(nd)
+        READ(kin,*,END=5) zd(nd),air(nd)
         nd = nd+1
         GOTO 4
  5    CONTINUE
       CLOSE(kin)
       nd = nd-1
 * add 1 meter to top, to avoid interpolation end-problem if z-grid is up to 120 km
-      zd(nd) = zd(nd) + 0.001
+      zd(nd) = zd(nd)+0.001
 
 * scale height, km, at top of atmosphere:
       hscale = 8.01
@@ -105,21 +104,21 @@
 *   interpolate log of air(nd) onto z grid 
 *   re-exponentiate to get gridded concentrations
 
-      DO i = 1, nd
+      DO i = 1,nd
          airlog(i) = ALOG(air(i))
       ENDDO
 
       IF(z(nz) .GT. zd(nd)) STOP 'in vpair: ztop < zdata'
-      CALL inter1(nz,z,conlog, nd,zd,airlog)
+      CALL inter1(nz,z,conlog,nd,zd,airlog)
 
-      DO i = 1, nz
+      DO i = 1,nz
          con(i) = EXP(conlog(i))
       ENDDO
 
 * Find gridded column increments in z-grid:
 *   use log intergration
 
-      DO i = 1, nz-1
+      DO i = 1,nz-1
 
 *  replaced logarithmic integral by geometric average, because of precision
 *   problems with very thin layers (e.g. 1 cm in snow)         
@@ -136,7 +135,7 @@ c     $        ALOG(con(i+1)/con(i))
 *   The layer nz is not used. The radiative transfer 
 *   calculation is based on nz-1 layers (not nz).
 
-      col(nz-1) = col(nz-1) + 1.E5 * hscale * con(nz)
+      col(nz-1) = col(nz-1)+1.E5 * hscale * con(nz)
   
 * Scale by input surface pressure:
 * min value = 1 molec cm-2
@@ -149,7 +148,7 @@ c     $        ALOG(con(i+1)/con(i))
          scale = 1.
       ENDIF
 
-      DO i = 1, nz - 1
+      DO i = 1,nz-1
          col(i) = col(i) * scale
          con(i) = con(i) * scale
       ENDDO

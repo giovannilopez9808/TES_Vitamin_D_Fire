@@ -20,33 +20,33 @@
       IMPLICIT NONE
       INCLUDE 'params'
 
-      INTEGER kdata
-      PARAMETER(kdata=150)
+      integer kdata
+      parameter(kdata=150)
 
 * input: (altitude working grid)
       REAL z(kz)
-      INTEGER nz
+      integer nz
 
 * output:
-      REAL tlev(kz), tlay(kz)
+      REAL tlev(kz),tlay(kz)
 
 * local:
-      REAL zd(kdata), td(kdata)
-      INTEGER i, nd
+      REAL zd(kdata),td(kdata)
+      integer i,nd
 *_______________________________________________________________________
 
 
 * read in temperature profile
 
-      WRITE(kout,*) 'air temperature: USSA, 1976'
+      WRITE(kout,*) 'air temperature: USSA,1976'
 
       OPEN(kin,FILE='DATAE1/ATM/ussa.temp',STATUS='old')
-      DO i = 1, 3
+      DO i = 1,3
          READ(kin,*)
       ENDDO
       nd = 1
  4    CONTINUE
-         READ(kin,*,END=5) zd(nd), td(nd) 
+         READ(kin,*,END=5) zd(nd),td(nd)
          nd = nd+1
          GOTO 4
  5    CONTINUE
@@ -68,8 +68,8 @@
 
 * compute layer-averages
 
-      DO 20, i = 1, nz - 1
-         tlay(i) = (tlev(i+1) + tlev(i))/2.
+      DO 20,i = 1,nz-1
+         tlay(i) = (tlev(i+1)+tlev(i))/2.
  20   CONTINUE
       tlay(nz) = tlay(nz-1)
 *_______________________________________________________________________

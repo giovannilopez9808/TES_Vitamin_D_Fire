@@ -43,9 +43,9 @@
       parameter(kdata=900000)
 
 * input: (wavelength grid)
-      INTEGER nw
+      integer nw
       REAL wl(kw)
-      INTEGER iw
+      integer iw
 
 * output: (extra terrestrial solar flux)
       REAL f(kw)
@@ -57,7 +57,7 @@
       CHARACTER*40 fil
       REAL x1(kdata)
       REAL y1(kdata)
-      INTEGER nhead, n, i, ierr
+      integer nhead,n,i,ierr
       REAL dum
 
 * data gridded onto wl(kw) grid:
@@ -67,7 +67,7 @@
       REAL yg3(kw)
       REAL yg4(kw)
 
-      INTEGER msun
+      integer msun
 
 *_______________________________________________________________________
 * select desired extra-terrestrial solar irradiance, using msun:
@@ -140,23 +140,23 @@
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 3
          n =121
-         DO i = 1, nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) x1(i), y1(i)
+         DO i = 1,n
+            READ(kin,*) x1(i),y1(i)
          ENDDO
          CLOSE (kin)
          CALL addpnt(x1,y1,kdata,n,x1(1)*(1.-deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,          0.,0.)
+         CALL addpnt(x1,y1,kdata,n,0.,0.)
          CALL addpnt(x1,y1,kdata,n,x1(n)*(1.+deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,      1.e+38,0.)
+         CALL addpnt(x1,y1,kdata,n,1.e+38,0.)
          CALL inter2(nw,wl,yg1,n,x1,y1,ierr)
          IF (ierr .NE. 0) THEN
-            WRITE(*,*) ierr, fil
+            WRITE(*,*) ierr,fil
             STOP
          ENDIF         
-         DO iw = 1, nw-1
+         DO iw = 1,nw-1
             f(iw) = yg1(iw)
          ENDDO
 
@@ -166,23 +166,23 @@
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 3
          n = 4327
-         DO i = 1, nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) x1(i), y1(i)
+         DO i = 1,n
+            READ(kin,*) x1(i),y1(i)
          ENDDO
          CLOSE (kin)
          CALL addpnt(x1,y1,kdata,n,x1(1)*(1.-deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,          0.,0.)
+         CALL addpnt(x1,y1,kdata,n,0.,0.)
          CALL addpnt(x1,y1,kdata,n,x1(n)*(1.+deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,      1.e+38,0.)
+         CALL addpnt(x1,y1,kdata,n,1.e+38,0.)
          CALL inter2(nw,wl,yg1,n,x1,y1,ierr)
          IF (ierr .NE. 0) THEN
-            WRITE(*,*) ierr, fil
+            WRITE(*,*) ierr,fil
             STOP
          ENDIF         
-         DO iw = 1, nw-1
+         DO iw = 1,nw-1
             f(iw) = yg1(iw)
          ENDDO
 
@@ -192,23 +192,23 @@
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 6
          n = 14980
-         DO i = 1, nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) x1(i), y1(i)
+         DO i = 1,n
+            READ(kin,*) x1(i),y1(i)
          ENDDO
          CLOSE (kin)
          CALL addpnt(x1,y1,kdata,n,x1(1)*(1.-deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,          0.,0.)
+         CALL addpnt(x1,y1,kdata,n,0.,0.)
          CALL addpnt(x1,y1,kdata,n,x1(n)*(1.+deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,      1.e+38,0.)
+         CALL addpnt(x1,y1,kdata,n,1.e+38,0.)
          CALL inter2(nw,wl,yg1,n,x1,y1,ierr)
          IF (ierr .NE. 0) THEN
-            WRITE(*,*) ierr, fil
+            WRITE(*,*) ierr,fil
             STOP
          ENDIF         
-         DO iw = 1, nw-1
+         DO iw = 1,nw-1
             f(iw) = yg1(iw)
          ENDDO
 
@@ -218,23 +218,23 @@
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 8
          n = 1260
-         DO i = 1, nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) x1(i), y1(i)
+         DO i = 1,n
+            READ(kin,*) x1(i),y1(i)
          ENDDO
          CLOSE (kin)
          CALL addpnt(x1,y1,kdata,n,x1(1)*(1.-deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,          0.,0.)
+         CALL addpnt(x1,y1,kdata,n,0.,0.)
          CALL addpnt(x1,y1,kdata,n,x1(n)*(1.+deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,      1.e+38,0.)
+         CALL addpnt(x1,y1,kdata,n,1.e+38,0.)
          CALL inter2(nw,wl,yg1,n,x1,y1,ierr)
          IF (ierr .NE. 0) THEN
-            WRITE(*,*) ierr, fil
+            WRITE(*,*) ierr,fil
             STOP
          ENDIF         
-         DO iw = 1, nw-1
+         DO iw = 1,nw-1
             f(iw) = yg1(iw)
          ENDDO
 
@@ -245,23 +245,23 @@
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 11
          n = 2047
-         DO i = 1, nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) x1(i), y1(i)
+         DO i = 1,n
+            READ(kin,*) x1(i),y1(i)
          ENDDO
          CLOSE (kin)
          CALL addpnt(x1,y1,kdata,n,x1(1)*(1.-deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,          0.,0.)
+         CALL addpnt(x1,y1,kdata,n,0.,0.)
          CALL addpnt(x1,y1,kdata,n,x1(n)*(1.+deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,      1.e+38,0.)
+         CALL addpnt(x1,y1,kdata,n,1.e+38,0.)
          CALL inter2(nw,wl,yg1,n,x1,y1,ierr)
          IF (ierr .NE. 0) THEN
-            WRITE(*,*) ierr, fil
+            WRITE(*,*) ierr,fil
             STOP
          ENDIF         
-         DO iw = 1, nw-1
+         DO iw = 1,nw-1
             f(iw) = yg1(iw)
          ENDDO
 
@@ -272,24 +272,24 @@
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 3
          n = 1200
-         DO i = 1, nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) x1(i), y1(i)
+         DO i = 1,n
+            READ(kin,*) x1(i),y1(i)
             y1(i) = y1(i)* 1.e-3
          ENDDO
          CLOSE (kin)
          CALL addpnt(x1,y1,kdata,n,x1(1)*(1.-deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,          0.,0.)
+         CALL addpnt(x1,y1,kdata,n,0.,0.)
          CALL addpnt(x1,y1,kdata,n,x1(n)*(1.+deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,      1.e+38,0.)
+         CALL addpnt(x1,y1,kdata,n,1.e+38,0.)
          CALL inter2(nw,wl,yg1,n,x1,y1,ierr)
          IF (ierr .NE. 0) THEN
-            WRITE(*,*) ierr, fil
+            WRITE(*,*) ierr,fil
             STOP
          ENDIF         
-         DO iw = 1, nw-1
+         DO iw = 1,nw-1
             f(iw) = yg1(iw)
          ENDDO
 
@@ -299,26 +299,26 @@
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 11
          n = 496
-         DO i = 1, nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) dum, y1(i)
-            if (dum .lt. 630.0) x1(i) = dum - 0.5
-            if (dum .gt. 630.0 .and. dum .lt. 870.0) x1(i) = dum - 1.0
-            if (dum .gt. 870.0) x1(i) = dum - 2.5
+         DO i = 1,n
+            READ(kin,*) dum,y1(i)
+            if (dum .lt. 630.0) x1(i) = dum-0.5
+            if (dum .gt. 630.0 .and. dum .lt. 870.0) x1(i) = dum-1.0
+            if (dum .gt. 870.0) x1(i) = dum-2.5
             y1(i) = y1(i) * 1.E4 * hc / (dum * 1.E-9)
          ENDDO
          CLOSE (kin)
-         x1(n+1) = x1(n) + 2.5
-         do i = 1, n
+         x1(n+1) = x1(n)+2.5
+         do i = 1,n
             y1(i) = y1(i) * (x1(i+1)-x1(i))
          enddo
          call inter3(nw,wl,yg2,n+1,x1,y1,0)
-         do iw = 1, nw-1
+         do iw = 1,nw-1
             yg1(iw) = yg1(iw) / (wl(iw+1)-wl(iw))
          enddo
-         DO iw = 1, nw-1
+         DO iw = 1,nw-1
             f(iw) = yg1(iw)
          ENDDO
 
@@ -329,24 +329,24 @@
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 13
          n = 5160
-         DO i = 1, nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) x1(i), y1(i)
+         DO i = 1,n
+            READ(kin,*) x1(i),y1(i)
             y1(i) = y1(i) * 1.E-3
          ENDDO
          CLOSE (kin)
          CALL addpnt(x1,y1,kdata,n,x1(1)*(1.-deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,          0.,0.)
+         CALL addpnt(x1,y1,kdata,n,0.,0.)
          CALL addpnt(x1,y1,kdata,n,x1(n)*(1.+deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,      1.e+38,0.)
+         CALL addpnt(x1,y1,kdata,n,1.e+38,0.)
          CALL inter2(nw,wl,yg1,n,x1,y1,ierr)
          IF (ierr .NE. 0) THEN
-            WRITE(*,*) ierr, fil
+            WRITE(*,*) ierr,fil
             STOP
          ENDIF         
-         DO iw = 1, nw-1
+         DO iw = 1,nw-1
             f(iw) = yg1(iw)
          ENDDO
 
@@ -356,30 +356,30 @@
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 2
          n = 302
-         DO i = 1, nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) x1(i), y1(i)
+         DO i = 1,n
+            READ(kin,*) x1(i),y1(i)
          ENDDO
          CLOSE (kin)
          CALL addpnt(x1,y1,kdata,n,x1(1)*(1.-deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,          0.,0.)
+         CALL addpnt(x1,y1,kdata,n,0.,0.)
          CALL addpnt(x1,y1,kdata,n,x1(n)*(1.+deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,      1.e+38,0.)
+         CALL addpnt(x1,y1,kdata,n,1.e+38,0.)
          CALL inter2(nw,wl,yg1,n,x1,y1,ierr)
          IF (ierr .NE. 0) THEN
-            WRITE(*,*) ierr, fil
+            WRITE(*,*) ierr,fil
             STOP
          ENDIF         
-         DO iw = 1, nw-1
+         DO iw = 1,nw-1
             f(iw) = yg1(iw)
          ENDDO
 
       ELSEIF (msun .EQ. 10) THEN
          WRITE(kout,*) 'DATAE1/SUN/susim_hi.flx'
          CALL read1(nw,wl,yg1)
-         DO iw = 1, nw-1
+         DO iw = 1,nw-1
             f(iw) = yg1(iw)
          ENDDO
 
@@ -387,7 +387,7 @@
       ELSEIF (msun .EQ. 11) THEN
          WRITE(kout,*) 'DATAE1/SUN/wmo85.flx'
          CALL read2(nw,wl,yg1)
-         DO iw = 1, nw-1
+         DO iw = 1,nw-1
             f(iw) = yg1(iw)
          ENDDO
 
@@ -399,27 +399,27 @@
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 11
          n = 496
-         DO i = 1, nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) dum, y1(i)
-            if (dum .lt. 630.0) x1(i) = dum - 0.5
-            if (dum .gt. 630.0 .and. dum .lt. 870.0) x1(i) = dum - 1.0
-            if (dum .gt. 870.0) x1(i) = dum - 2.5
+         DO i = 1,n
+            READ(kin,*) dum,y1(i)
+            if (dum .lt. 630.0) x1(i) = dum-0.5
+            if (dum .gt. 630.0 .and. dum .lt. 870.0) x1(i) = dum-1.0
+            if (dum .gt. 870.0) x1(i) = dum-2.5
             y1(i) = y1(i) * 1.E4 * hc / (dum * 1.E-9)
          ENDDO
          CLOSE (kin)
-         x1(n+1) = x1(n) + 2.5
-         do i = 1, n
+         x1(n+1) = x1(n)+2.5
+         do i = 1,n
             y1(i) = y1(i) * (x1(i+1)-x1(i))
          enddo
          call inter3(nw,wl,yg2,n+1,x1,y1,0)
-         do iw = 1, nw-1
+         do iw = 1,nw-1
             yg2(iw) = yg2(iw) / (wl(iw+1)-wl(iw))
          enddo
 
-         DO iw = 1, nw-1
+         DO iw = 1,nw-1
             IF (wl(iw) .GT. 350.) THEN
                f(iw) = yg2(iw)
             ELSE
@@ -437,21 +437,21 @@
          write(kout,*) fil
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          n = 5160
-         DO i = 1, nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) x1(i), y1(i)
+         DO i = 1,n
+            READ(kin,*) x1(i),y1(i)
             y1(i) = y1(i) * 1.E-3
          ENDDO
          CLOSE (kin)
          CALL addpnt(x1,y1,kdata,n,x1(1)*(1.-deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,          0.,0.)
+         CALL addpnt(x1,y1,kdata,n,0.,0.)
          CALL addpnt(x1,y1,kdata,n,x1(n)*(1.+deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,      1.e+38,0.)
+         CALL addpnt(x1,y1,kdata,n,1.e+38,0.)
          CALL inter2(nw,wl,yg2,n,x1,y1,ierr)
          IF (ierr .NE. 0) THEN
-            WRITE(*,*) ierr, fil
+            WRITE(*,*) ierr,fil
             STOP
          ENDIF         
 
@@ -460,22 +460,22 @@
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 11
          n = 496
-         DO i = 1, nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) dum, y1(i)
-            if (dum .lt. 630.0) x1(i) = dum - 0.5
-            if (dum .gt. 630.0 .and. dum .lt. 870.0) x1(i) = dum - 1.0
-            if (dum .gt. 870.0) x1(i) = dum - 2.5
+         DO i = 1,n
+            READ(kin,*) dum,y1(i)
+            if (dum .lt. 630.0) x1(i) = dum-0.5
+            if (dum .gt. 630.0 .and. dum .lt. 870.0) x1(i) = dum-1.0
+            if (dum .gt. 870.0) x1(i) = dum-2.5
             y1(i) = y1(i) * 1.E4 * hc / (dum * 1.E-9)
          ENDDO
          CLOSE (kin)
 
-         x1(n+1) = x1(n) + 2.5
+         x1(n+1) = x1(n)+2.5
          call inter4(nw,wl,yg3,n+1,x1,y1,0)
 
-         DO iw = 1, nw-1
+         DO iw = 1,nw-1
 
             IF (wl(iw) .LT. 150.01) THEN
                f(iw) = yg1(iw)
@@ -497,22 +497,22 @@
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 11
          n = 496
-         DO i = 1, nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) dum, y1(i)
-            if (dum .lt. 630.0) x1(i) = dum - 0.5
-            if (dum .gt. 630.0 .and. dum .lt. 870.0) x1(i) = dum - 1.0
-            if (dum .gt. 870.0) x1(i) = dum - 2.5
+         DO i = 1,n
+            READ(kin,*) dum,y1(i)
+            if (dum .lt. 630.0) x1(i) = dum-0.5
+            if (dum .gt. 630.0 .and. dum .lt. 870.0) x1(i) = dum-1.0
+            if (dum .gt. 870.0) x1(i) = dum-2.5
             y1(i) = y1(i) * 1.E4 * hc / (dum * 1.E-9)
          ENDDO
          CLOSE (kin)
 
-         x1(n+1) = x1(n) + 2.5
+         x1(n+1) = x1(n)+2.5
          call inter4(nw,wl,yg3,n+1,x1,y1,0)
 
-         DO iw = 1, nw-1
+         DO iw = 1,nw-1
 
             IF (wl(iw) .LE. 350.) THEN
                f(iw) = yg1(iw)
@@ -532,21 +532,21 @@
          write(kout,*) fil
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          n = 5160
-         DO i = 1, nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) x1(i), y1(i)
+         DO i = 1,n
+            READ(kin,*) x1(i),y1(i)
             y1(i) = y1(i) * 1.E-3
          ENDDO
          CLOSE (kin)
          CALL addpnt(x1,y1,kdata,n,x1(1)*(1.-deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,          0.,0.)
+         CALL addpnt(x1,y1,kdata,n,0.,0.)
          CALL addpnt(x1,y1,kdata,n,x1(n)*(1.+deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,      1.e+38,0.)
+         CALL addpnt(x1,y1,kdata,n,1.e+38,0.)
          CALL inter2(nw,wl,yg2,n,x1,y1,ierr)
          IF (ierr .NE. 0) THEN
-            WRITE(*,*) ierr, fil
+            WRITE(*,*) ierr,fil
             STOP
          ENDIF         
 
@@ -555,42 +555,42 @@
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
          nhead = 11
          n = 496
-         DO i = 1, nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) dum, y1(i)
-            if (dum .lt. 630.0) x1(i) = dum - 0.5
-            if (dum .gt. 630.0 .and. dum .lt. 870.0) x1(i) = dum - 1.0
-            if (dum .gt. 870.0) x1(i) = dum - 2.5
+         DO i = 1,n
+            READ(kin,*) dum,y1(i)
+            if (dum .lt. 630.0) x1(i) = dum-0.5
+            if (dum .gt. 630.0 .and. dum .lt. 870.0) x1(i) = dum-1.0
+            if (dum .gt. 870.0) x1(i) = dum-2.5
             y1(i) = y1(i) * 1.E4 * hc / (dum * 1.E-9)
          ENDDO
          CLOSE (kin)
 
-         x1(n+1) = x1(n) + 2.5
+         x1(n+1) = x1(n)+2.5
          call inter4(nw,wl,yg3,n+1,x1,y1,0)
 
          nhead = 8
          fil = 'DATAE1/SUN/sao2010.solref.converted'
          write(kout,*) fil
          OPEN(UNIT=kin,FILE=fil,STATUS='old')
-         n = 80099 - nhead
-         DO i = 1, nhead
+         n = 80099-nhead
+         DO i = 1,nhead
             READ(kin,*)
          ENDDO
-         DO i = 1, n
-            READ(kin,*) x1(i), dum, y1(i), dum
+         DO i = 1,n
+            READ(kin,*) x1(i),dum,y1(i),dum
 c            y1(i) = y1(i) * 1.E4 * hc / (x1(i) * 1.E-9)
          ENDDO
          CLOSE (kin)
 
          CALL addpnt(x1,y1,kdata,n,x1(1)*(1.-deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,          0.,0.)
+         CALL addpnt(x1,y1,kdata,n,0.,0.)
          CALL addpnt(x1,y1,kdata,n,x1(n)*(1.+deltax),0.)
-         CALL addpnt(x1,y1,kdata,n,      1.e+38,0.)
+         CALL addpnt(x1,y1,kdata,n,1.e+38,0.)
          CALL inter2(nw,wl,yg4,n,x1,y1,ierr)
          IF (ierr .NE. 0) THEN
-            WRITE(*,*) ierr, fil
+            WRITE(*,*) ierr,fil
             STOP
          ENDIF         
 
@@ -599,7 +599,7 @@ c            y1(i) = y1(i) * 1.E4 * hc / (x1(i) * 1.E-9)
 *    for wl(iw) .ge. 200.07 .and. wl(iw) .le. 1000.99       Chance and Kurucz 2010
 *    for wl(iw) .gt. 1000.99                                Neckel & Labs 
 
-         DO iw = 1, nw-1
+         DO iw = 1,nw-1
 
             IF (wl(iw) .LT. 150.01) THEN
                f(iw) = yg1(iw)
@@ -640,7 +640,7 @@ c            y1(i) = y1(i) * 1.E4 * hc / (x1(i) * 1.E-9)
       INCLUDE 'params'
 
 * input: (wavelength grid)
-      INTEGER nw
+      integer nw
       REAL wl(kw)
 
 * output: (extra terrestrial solar flux)
@@ -650,8 +650,8 @@ c            y1(i) = y1(i) * 1.E4 * hc / (x1(i) * 1.E-9)
 
       REAL lambda_hi(10000),irrad_hi(10000)
       REAL lambda
-      INTEGER ierr
-      INTEGER i, j, n
+      integer ierr
+      integer i,j,n
       CHARACTER*40 FIL
 
 *_______________________________________________________________________
@@ -676,32 +676,32 @@ c            y1(i) = y1(i) * 1.E4 * hc / (x1(i) * 1.E-9)
 
       fil = 'DATAE1/SUN/susim_hi.flx'
       OPEN(UNIT=kin,FILE=fil,STATUS='old')
-      DO 11, i = 1, 7
+      DO 11,i = 1,7
          READ(kin,*)
    11 CONTINUE
-      DO 12, i = 1, 559
-         READ(kin,*)lambda,(irrad_hi(10*(i-1)+j), j=1, 10)
+      DO 12,i = 1,559
+         READ(kin,*)lambda,(irrad_hi(10*(i-1)+j),j=1,10)
    12 CONTINUE
       CLOSE (kin)
 
 * compute wavelengths, convert from mW to W
 
       n = 559*10
-      DO 13, i = 1, n
-         lambda_hi(i)=120.5 + FLOAT(i-1)*.05
+      DO 13,i = 1,n
+         lambda_hi(i)=120.5+FLOAT(i-1)*.05
          irrad_hi(i) = irrad_hi(i)  /  1000.
    13 CONTINUE
 *_______________________________________________________________________
 
-      CALL addpnt(lambda_hi,irrad_hi,10000,n,
-     >            lambda_hi(1)*(1.-deltax),0.)
-      CALL addpnt(lambda_hi,irrad_hi,10000,n,                 0.,0.)
-      CALL addpnt(lambda_hi,irrad_hi,10000,n,
-     >            lambda_hi(n)*(1.+deltax),0.)
-      CALL addpnt(lambda_hi,irrad_hi,10000,n,              1.e38,0.)
+      CALL addpnt(lambda_hi,irrad_hi,10000,n,lambda_hi(1)*(1.-deltax),
+     >   0.)
+      CALL addpnt(lambda_hi,irrad_hi,10000,n,0.,0.)
+      CALL addpnt(lambda_hi,irrad_hi,10000,n,lambda_hi(n)*(1.+deltax),
+     >   0.)
+      CALL addpnt(lambda_hi,irrad_hi,10000,n,1.e38,0.)
       CALL inter2(nw,wl,f,n,lambda_hi,irrad_hi,ierr)
       IF (ierr .NE. 0) THEN
-         WRITE(*,*) ierr, fil
+         WRITE(*,*) ierr,fil
          STOP
       ENDIF
 
@@ -730,37 +730,37 @@ c            y1(i) = y1(i) * 1.E4 * hc / (x1(i) * 1.E-9)
       INCLUDE 'params'
 
 * input: (wavelength grid)
-      INTEGER nw
+      integer nw
       REAL wl(kw)
       REAL yg(kw)
 
 *
-      INTEGER iw
+      integer iw
 
 * output: (extra terrestrial solar flux)
       REAL f(kw)
 
 * local:
 
-      REAL x1(1000), y1(1000) 
+      REAL x1(1000),y1(1000)
       REAL x2(1000)
       REAL x3(1000)
-      INTEGER i, n
+      integer i,n
       REAL DUM
-      INTEGER IDUM
+      integer IDUM
 
 *_______________________________________________________________________
 
 *********WMO 85 irradiance
 
       OPEN(UNIT=kin,FILE='DATAE1/SUN/wmo85.flx',STATUS='old')
-      DO 11, i = 1, 3
+      DO 11,i = 1,3
          READ(kin,*)
    11 CONTINUE
       n = 158
-      DO 12, i = 1, n
-         READ(kin,*) idum, x1(i),x2(i),y1(i), dum, dum, dum
-         x3(i) = 0.5 * (x1(i) + x2(i))
+      DO 12,i = 1,n
+         READ(kin,*) idum,x1(i),x2(i),y1(i),dum,dum,dum
+         x3(i) = 0.5 * (x1(i)+x2(i))
 
 C average value needs to be calculated only if inter2 is
 C used to interpolate onto wavelength grid (see below)
@@ -776,10 +776,10 @@ C         OUTPUT: average value in each bin
 C inter3: INPUT : total area in each bin
 C         OUTPUT: total area in each bin
 
-      CALL inter3(nw,wl,yg, n+1,x1,y1,0)
+      CALL inter3(nw,wl,yg,n+1,x1,y1,0)
 C      CALL inter2(nw,wl,yg,n,x3,y1,ierr)
 
-      DO 10,  iw = 1, nw-1
+      DO 10,iw = 1,nw-1
 * from quanta s-1 cm-2 bin-1 to  watts m-2 nm-1
 * 1.e4 * ([hc =] 6.62E-34 * 2.998E8)/(wc*1e-9) 
          
@@ -787,8 +787,8 @@ C the scaling by bin width needs to be done only if
 C inter3 is used for interpolation
 
          yg(iw) = yg(iw) / (wl(iw+1)-wl(iw))
-         f(iw) = yg(iw) * 1.e4 * (6.62E-34 * 2.998E8) / 
-     $        ( 0.5 * (wl(iw+1)+wl(iw)) * 1.e-9)
+         f(iw) = yg(iw) * 1.e4 * (6.62E-34 * 2.998E8) /( 0.5 * (wl(iw+
+     $      1)+wl(iw)) * 1.e-9)
 
    10 CONTINUE
 

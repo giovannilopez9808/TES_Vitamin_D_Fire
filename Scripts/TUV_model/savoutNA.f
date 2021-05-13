@@ -172,8 +172,7 @@
 
       IF(iout .NE. 6) THEN
          CALL atrim(outfil,finame,nlen)
-         OPEN(UNIT=iout,
-     $      FILE="../../Results/TUV/"//finame(1:nlen)//'.txt',
+         OPEN(UNIT=iout,FILE="../Results/TUV/"//finame(1:nlen)//'.txt',
      $      STATUS='UNKNOWN')
       ENDIF
 

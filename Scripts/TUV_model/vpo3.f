@@ -1,7 +1,6 @@
 *=============================================================================*
 
-      SUBROUTINE vpo3(ipbl, zpbl, mr_pbl, 
-     $     to3new, nz, z, aircol, col)
+      SUBROUTINE vpo3(ipbl,zpbl,mr_pbl,to3new,nz,z,aircol,col)
 
 *-----------------------------------------------------------------------------*
 *=  NAME:  Vertical Profiles of Ozone = vpo3                                 =*
@@ -39,28 +38,28 @@
 
 *** from calling program:
 
-      INTEGER nz
+      integer nz
       REAL z(kz)
       REAL to3new
       REAL aircol(kz)
 
-      REAL zpbl, mr_pbl
-      INTEGER ipbl
+      REAL zpbl,mr_pbl
+      integer ipbl
 
 * from data file:  concentration data as a function of altitude
 
-      INTEGER kdata
-      PARAMETER(kdata=150)
-      REAL zd(kdata), xd(kdata)
+      integer kdata
+      parameter(kdata=150)
+      REAL zd(kdata),xd(kdata)
 
 
 ********
 * internal
 ********
 
-      INTEGER i, nd
+      integer i,nd
       REAL hscale
-      REAL to3old, scale
+      REAL to3old,scale
       
       REAL con(kz)
 
@@ -94,14 +93,14 @@
 * If a different vertical concentration profile is specified, the code
 * in this section (Section 1) should be replaced accordingly
 
-      WRITE(kout,*) 'ozone profile: USSA, 1976'
+      WRITE(kout,*) 'ozone profile: USSA,1976'
       OPEN(kin,FILE='DATAE1/ATM/ussa.ozone',STATUS='old')
-      DO i = 1, 7
+      DO i = 1,7
         READ(kin,*)
       ENDDO
       nd = 39
-      DO i = 1, nd
-         READ(kin,*) zd(i), xd(i)
+      DO i = 1,nd
+         READ(kin,*) zd(i),xd(i)
       ENDDO
       CLOSE(kin)
 
@@ -112,8 +111,8 @@
       hscale = 4.5
       rfact = EXP(-1./hscale)
  10   CONTINUE
-      nd = nd + 1
-      zd(nd) = zd(nd-1) + 1.
+      nd = nd+1
+      zd(nd) = zd(nd-1)+1.
       xd(nd) = xd(nd-1) * rfact
       IF(zd(nd) .GE. 121.) GO TO 19
       GO TO 10
@@ -125,12 +124,12 @@
 
 * linear interpolation
 
-      CALL inter1(nz,z,con, nd,zd,xd)
+      CALL inter1(nz,z,con,nd,zd,xd)
 
 * compute column increments
 
-      DO i = 1, nz-1
-         col(i) = 0.5 * (con(i) + con(i+1)) * (z(i+1) - z(i)) * 1.E5
+      DO i = 1,nz-1
+         col(i) = 0.5 * (con(i)+con(i+1)) * (z(i+1)-z(i)) * 1.E5
       ENDDO
 
 * Add exponential tail integral at top of atmosphere:
@@ -138,7 +137,7 @@
 *   The layer nz is not used. The radiative transfer 
 *   calculation is based on nz-1 layers (not nz).
 
-      col(nz-1) = col(nz-1) + 1.E5 * hscale * con(nz)
+      col(nz-1) = col(nz-1)+1.E5 * hscale * con(nz)
 
 ***** Scaling to new total ozone
 * to3old = total o3 column, in Dobson Units, old value
@@ -149,10 +148,10 @@
 
       IF (to3new .GT. nzero) THEN
 
-         to3old = fsum(nz-1, col)/2.687e16
+         to3old = fsum(nz-1,col)/2.687e16
          IF(to3old .LT. pzero) STOP 'in vpo3: to3old is too small'
          scale = to3new/to3old
-         DO i = 1, nz-1
+         DO i = 1,nz-1
             col(i) = col(i) * scale
             con(i) = con(i) * scale
          ENDDO
@@ -164,9 +163,9 @@
 * use mixing ratio in pbl
 
       IF(ipbl .GT. 0) THEN
-         write(*,*) 'pbl O3 = ', mr_pbl, ' ppb'
+         write(*,*) 'pbl O3 = ',mr_pbl,' ppb'
 
-         DO i = 1, nz-1
+         DO i = 1,nz-1
             IF (i .LE. ipbl) THEN
                col(i) = mr_pbl*1.E-9 * aircol(i)
             ENDIF
