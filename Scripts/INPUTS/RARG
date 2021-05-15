@@ -1,7 +1,7 @@
 TUV inputs:
 ==================================================================
 inpfil =        RARG   outfil =        cdmx   nstr =            -2
-lat =        -32.920   lon =        -60.780   tmzone =        -3.0
+lat =        -32.920   lon =        -60.780   tmzone =        -4.0
 iyear =         2016   imonth =           1   iday =             9
 zstart =       0.025   zstop =       80.000   nz =              81
 wstart =     280.000   wstop =      400.000   nwint =          120

@@ -25,7 +25,7 @@ inputs = {
     "path results": "../Results/TUV/",
     "day initial": "2020-05-11",
     "day final": "2020-09-30",
-    "hour initial": 9,
+    "hour initial": 11,
     "hour final": 17,
     "RD limit": 10,
     "RD delta": 1,

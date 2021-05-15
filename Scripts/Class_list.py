@@ -23,7 +23,7 @@ class Davis_data:
 
     def read_data(self):
         """
-        Funcion que realiza la lectura de los datos y aplica el formato 
+        Funcion que realiza la lectura de los datos y aplica el formato
         a las fechas
         """
         self.data = pd.read_csv("{}{}".format(self.path_data,
@@ -83,7 +83,7 @@ class OMI_data:
 
     def read_data(self):
         """
-        Funcion que realiza la lectura de los datos y aplica el formato 
+        Funcion que realiza la lectura de los datos y aplica el formato
         a las fechas
         """
         self.data = pd.read_fwf("{}{}.dat".format(self.path_data,
@@ -134,11 +134,8 @@ class TUV_model:
             self.data_measurement = self.data[date]
             if self.data_measurement != 0:
                 print("{}".format(date))
-                print("\t{}\t{}\t{}\t{}".format("RD",
-                                                "AOD",
-                                                "Davis",
-                                                "TUV"))
-                run = self.initialize_search()
+                self.print_header_results()
+                run, attempt, print_bool = self.initialize_search()
                 self.obtain_hour_and_minute(date)
                 while run:
                     self.obtain_aod()
@@ -147,33 +144,42 @@ class TUV_model:
                     Results.read_results()
                     RD = calculate_RD(self.data_measurement,
                                       Results.data[self.minute])
-                    print("\t{:.2f}\t{:.3f}\t{:.3f}\t{:.3f}".format(RD,
-                                                                    self.aod,
-                                                                    self.data_measurement,
-                                                                    Results.data[self.minute]))
-                    run = self.aod_binary_search(RD, run)
-            else:
-                pass
+                    run, print_bool = self.aod_binary_search(RD,
+                                                             run,
+                                                             print_bool)
+                    attempt += 1
+                    self.print_date_results(RD,
+                                            self.aod,
+                                            self.data_measurement,
+                                            Results.data[self.minute])
+                    run = self.excess_of_attempts(attempt, run)
+                Results.write_AOD_results(date,
+                                          self.aod,
+                                          RD,
+                                          print_bool)
 
     def initialize_search(self):
         self.aod_i_n = self.aod_i
         self.aod_f_n = self.aod_f
         run = True
-        return run
+        attempt = 0
+        print_bool = False
+        return run, attempt, print_bool
 
     def obtain_hour_and_minute(self, date):
-        self.hour_i = date.hour+60/60
+        self.hour_i = date.hour  # +60/60
         self.hour_f = self.hour_i+1
         self.minute = date.minute//5
 
-    def aod_binary_search(self, RD, run):
+    def aod_binary_search(self, RD, run, print_bool):
         if RD > self.RD+self.delta_RD:
             self.aod_i_n = self.aod
         elif RD < self.RD-self.delta_RD:
             self.aod_f_n = self.aod
         else:
             run = False
-        return run
+            print_bool = True
+        return run, print_bool
 
     def obtain_aod(self):
         self.aod = (self.aod_i_n+self.aod_f_n)/2
@@ -191,11 +197,31 @@ class TUV_model:
                                                             self.hour_f))
         input_file.close()
 
+    def excess_of_attempts(self, attempt, run):
+        if attempt >= 10:
+            run = False
+        return run
+
+    def print_header_results(self):
+        print("\t{}\t{}\t{}\t{}".format("RD",
+                                        "AOD",
+                                        "Davis",
+                                        "TUV"))
+
+    def print_date_results(self, RD, AOD, measurement, data):
+        print("\t{:.2f}\t{:.3f}\t{:.3f}\t{:.3f}".format(RD,
+                                                        AOD,
+                                                        measurement,
+                                                        data))
+
 
 class TUV_Results:
     def __init__(self, path, name):
         self.path = path
+        self.path_file = path.replace("TUV/", "")
         self.name = name
+        self.write_AOD_results
+        self.write_Header_Results_file()
 
     def read_results(self):
         skiprows = 132
@@ -205,3 +231,20 @@ class TUV_Results:
                                            max_rows=13,
                                            usecols=[0, 2],
                                            unpack=True)
+
+    def write_Header_Results_file(self):
+        self.file_results = open("{}{}.csv".format(self.path_file,
+                                                   "Dates_AOD"),
+                                 "w")
+        self.file_results.write("Date,AOD,RD\n")
+        self.file_results.close()
+
+    def write_AOD_results(self, date, AOD, RD, print_bool):
+        if print_bool:
+            self.file_results = open("{}{}.csv".format(self.path_file,
+                                                       "Dates_AOD"),
+                                     "a")
+            self.file_results.write("{},{:.3f},{:.2f}\n".format(date,
+                                                                AOD,
+                                                                RD))
+            self.file_results.close()
