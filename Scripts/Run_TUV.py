@@ -25,8 +25,8 @@ inputs = {
     "path results": "../Results/TUV/",
     "day initial": "2020-05-11",
     "day final": "2020-09-30",
-    "hour initial": 11,
-    "hour final": 17,
+    "hour initial": 9,
+    "hour final": 10,
     "RD limit": 10,
     "RD delta": 1,
     "AOD initial": 0,
@@ -38,18 +38,19 @@ Davis = Davis_data(inputs["path data"],
                    inputs["day final"])
 data_TUV = pd.read_csv(inputs["path data"]+inputs["file data"])
 data_TUV = date_format(data_TUV)
+Results = TUV_Results(inputs["path results"])
 for date in data_TUV.index:
     data = obtain_data_per_day(Davis.data["UV"],
                                date)
     data = obtain_data_into_hours(data,
                                   inputs["hour initial"],
                                   inputs["hour final"])
-    TUV = TUV_model(inputs["path results"],
-                    date,
+    TUV = TUV_model(date,
                     data_TUV["Ozone"][date],
                     data,
                     inputs["AOD initial"],
                     inputs["AOD final"],
                     inputs["RD limit"],
-                    inputs["RD delta"])
+                    inputs["RD delta"],
+                    Results)
     TUV.run()

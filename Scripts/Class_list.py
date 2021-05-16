@@ -112,9 +112,14 @@ class OMI_data:
 
 
 class TUV_model:
-    def __init__(self, path_results, date, ozone, data, aod_i, aod_f, RD, delta_RD):
-        self.path_results = path_results
+    """
+    Clase que realiza la ejecucion del modelo TUV y acopla un AOD
+    dada un RD ,una medición y una fecha.
+    """
+
+    def __init__(self, date, ozone, data, aod_i, aod_f, RD, delta_RD, results):
         self.delta_RD = delta_RD
+        self.results = results
         self.ozone = ozone
         self.aod_i = aod_i
         self.aod_f = aod_f
@@ -124,12 +129,16 @@ class TUV_model:
         self.obtain_yymmdd_from_date()
 
     def obtain_yymmdd_from_date(self):
+        """
+        Obtiene el nombre de salida, año, mes y día a partir de la fecha
+        """
         self.outfile, self.year, self.month, self.day = date_to_yymmdd(
             self.date)
 
     def run(self):
-        Results = TUV_Results(self.path_results,
-                              self.outfile)
+        """
+        Ejecucion del algoritmo de busqueda del AOD con el modelo TUv
+        """
         for date in self.data.index:
             self.data_measurement = self.data[date]
             if self.data_measurement != 0:
@@ -141,9 +150,9 @@ class TUV_model:
                     self.obtain_aod()
                     self.create_TUV_input()
                     os.system("./TUV_model/tuv_rosario.out")
-                    Results.read_results()
+                    self.results.read_results(self.outfile)
                     RD = calculate_RD(self.data_measurement,
-                                      Results.data[self.minute])
+                                      self.results.data[self.minute])
                     run, print_bool = self.aod_binary_search(RD,
                                                              run,
                                                              print_bool)
@@ -151,14 +160,18 @@ class TUV_model:
                     self.print_date_results(RD,
                                             self.aod,
                                             self.data_measurement,
-                                            Results.data[self.minute])
+                                            self.results.data[self.minute])
                     run = self.excess_of_attempts(attempt, run)
-                Results.write_AOD_results(date,
-                                          self.aod,
-                                          RD,
-                                          print_bool)
+                self.results.write_AOD_results(date,
+                                               self.aod,
+                                               RD,
+                                               print_bool)
 
     def initialize_search(self):
+        """
+        Inicialización de los valores iniciales en el algoritmo de 
+        busqueda
+        """
         self.aod_i_n = self.aod_i
         self.aod_f_n = self.aod_f
         run = True
@@ -167,11 +180,20 @@ class TUV_model:
         return run, attempt, print_bool
 
     def obtain_hour_and_minute(self, date):
-        self.hour_i = date.hour  # +60/60
+        """
+        Obtiene la hora inicial y final en la que se ejecutara el modelo
+        TUV a partir de la medición. Incluye el minuto en el cual se comparara
+        el valor de UVI
+        """
+        self.hour_i = date.hour  # -15/60
         self.hour_f = self.hour_i+1
         self.minute = date.minute//5
 
     def aod_binary_search(self, RD, run, print_bool):
+        """
+        Decision del cambio en los limites de la busqueda del AOD
+        dependiendo la RD obtenida.
+        """
         if RD > self.RD+self.delta_RD:
             self.aod_i_n = self.aod
         elif RD < self.RD-self.delta_RD:
@@ -182,9 +204,16 @@ class TUV_model:
         return run, print_bool
 
     def obtain_aod(self):
+        """
+        Calculo del AOD con el que se ejecutara el modelo TUV
+        """
         self.aod = (self.aod_i_n+self.aod_f_n)/2
 
     def create_TUV_input(self):
+        """
+        Creación del TUV input con el formato
+        Outfile Ozone AOD Year Month Day Hour_initial Hour_final
+        """
         input_file = open("TUV_input.txt",
                           "w")
         input_file.write("{} {} {} 20{} {} {} {} {}".format(self.outfile,
@@ -198,17 +227,26 @@ class TUV_model:
         input_file.close()
 
     def excess_of_attempts(self, attempt, run):
+        """
+        Limite de intentos en el algoritmo de busqueda
+        """
         if attempt >= 10:
             run = False
         return run
 
     def print_header_results(self):
+        """
+        Escritura de los headers en la terminal
+        """
         print("\t{}\t{}\t{}\t{}".format("RD",
                                         "AOD",
                                         "Davis",
                                         "TUV"))
 
     def print_date_results(self, RD, AOD, measurement, data):
+        """
+        Escritura de los resultados en la terminal
+        """
         print("\t{:.2f}\t{:.3f}\t{:.3f}\t{:.3f}".format(RD,
                                                         AOD,
                                                         measurement,
@@ -216,17 +254,16 @@ class TUV_model:
 
 
 class TUV_Results:
-    def __init__(self, path, name):
+    def __init__(self, path):
         self.path = path
         self.path_file = path.replace("TUV/", "")
-        self.name = name
         self.write_AOD_results
         self.write_Header_Results_file()
 
-    def read_results(self):
+    def read_results(self, name):
         skiprows = 132
         self.hours, self.data = np.loadtxt("{}{}.txt".format(self.path,
-                                                             self.name),
+                                                             name),
                                            skiprows=skiprows,
                                            max_rows=13,
                                            usecols=[0, 2],
