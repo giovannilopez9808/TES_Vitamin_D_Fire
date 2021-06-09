@@ -1,0 +1,187 @@
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Template para producir documentos "camera ready" para Anales de la AFA
+% 
+%  No se debería tener que modificar nada del siguiente preámbulo, donde están 
+%  las customizaciones para adaptar la clase "article" a los Anales AFA.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[10pt,twocolumn]{article} 
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+\usepackage[spanish]{babel}
+
+
+%%% DIMENSIONES DE LA PÁGINA
+\usepackage{geometry} 
+\geometry{a4paper} 
+ \geometry{top=2.25cm} 
+ \geometry{bottom=2.25cm} 
+ \geometry{left=2.5cm} 
+ \geometry{right=2cm} 
+
+
+%%% PACKAGES
+\usepackage{graphicx} 
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+\usepackage{lipsum}  
+\usepackage{hyperref}
+\usepackage[superscript]{cite}  %REFERENCIAS EN SUPERÍNDICE
+
+% Ajusta los captions de tablas y figuras a italics
+\usepackage[format=plain,
+            labelfont=it,
+            textfont=it]{caption}
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+%\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\usepackage{varwidth}
+\usepackage{authblk}
+\newcommand{\filiacion}[2]{\affil[#1]{\protect\begin{varwidth}[t]{\linewidth}\protect\centering \normalfont#2 \protect\end{varwidth}}}
+\newcommand{\autor}[2]{\author[#1]{\bf #2}}
+\newcommand{\corresponding}[2]{\author[#1]{\bf #2\thanks{}}}
+\newcommand\cauthemail[1]{\footnotetext{#1}}
+\newcommand{\fecha}[1]{\date{\vspace{-1ex}\small{#1}}}
+\newcommand{\titulo}[2]{\title{\bf{\large{#1 \\ \vspace{1.5ex} #2 }}}}
+\newcommand{\esresumen}[1]{\small{#1 \par}\vspace{1.5ex}}
+\newcommand{\pclaves}[1]{\small{\emph{#1} \par}\vspace{1.5ex}}
+\newcommand{\enresumen}[1]{\small{#1 \par}\vspace{1.5ex}}
+\newcommand{\keywords}[1]{\small{\emph{#1} \par}\vspace{1.5ex}}
+
+
+
+%%% APARIENCIA DE TITULOS, SECCIONES Y SUBSECCIONES
+\usepackage{sectsty}
+\allsectionsfont{\fontsize{10}{12}\sffamily\bfseries\upshape} % (See the fntguide.pdf for font help)
+
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{1.5ex}{0.8ex}
+\titlespacing*{\subsection}{0pt}{1.2ex}{0.6ex}
+\setcounter{secnumdepth}{1}   %no numera las subsecciones
+
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+\renewcommand\thesection{\Roman{section}}
+\renewcommand\thesubsection{}
+
+
+
+%%% PARA EL FORMATO DE TABLAS
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\makeatletter
+\newcommand{\thickhline}{%
+    \noalign {\ifnum 0=`}\fi \hrule height 1.5pt
+    \futurelet \reserved@a \@xhline
+}
+\newcolumntype{"}{@{\hskip\tabcolsep\vrule width 1pt\hskip\tabcolsep}}
+\makeatother
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+\renewcommand\spanishtablename{Tabla}  
+
+% Corresponding author
+\usepackage[table,xcdraw]{xcolor}
+\makeatletter
+\renewcommand\@biblabel[1]{#1.}
+\makeatother
+
+\pagestyle{empty}
+
+%%%%%% En principio no debería hacer falta modificar nada por encima de esta línea
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% El contenido del documento comienza a partir de acá 
+
+%título del trabajo: en el primer campo en castellano, en el segundo en inglés
+\titulo{Déficit de vitamina D como consecuencia de la quema de pastizales en Rosario}{a}
+
+% \corresponding{1}{Adriana Ipiña}
+% \autor{2}{Montserrat Dávalos}
+% \autor{3}{Gamaliel López-Padilla}
+% \autor{1}{Rubén D. Piacentini}
+
+%afiliaciones: se pueden combinar
+% \filiacion{1}{Instituto de Física Rosario (IFIR) – Universidad Nacional Rosario – Consejo Nacional de Investigaciones Científicas y
+% Técnicas, 27 de Febrero 210BIS – (S2000EKF) Rosario – Argentina.}
+% \filiacion{2}{Investigadora Independiente, (64810) México}
+% \filiacion{3}{Facultad de Ciencias Físico Matemáticas – Universidad Autónoma de Nuevo León, Pedro de Alba S/N - Ciudad
+% Universitaria San Nicolás de los Garza (66451) – México.}
+
+% \fecha{Recibido: xx/xx/xx; Aceptado: xx/xx/xx} %No modificar
+
+
+\setcounter{Maxaffil}{0}
+\renewcommand\Affilfont{\itshape\small}
+
+
+\begin{document}
+
+\renewcommand{\abstractname}{}
+\twocolumn[
+  \begin{@twocolumnfalse}
+    \maketitle
+    \begin{abstract}\vspace{-12ex}
+      \centering\begin{minipage}{\dimexpr\paperwidth-6cm}
+
+        %Abstract en castellano
+        \esresumen{-}
+        \pclaves{-} %palabras clave
+
+        %Abstract en inglés
+        \enresumen{-}
+        \keywords{-}  %key words
+
+      \end{minipage}
+      \vspace{4ex}
+    \end{abstract}
+  \end{@twocolumnfalse}
+]
+\thispagestyle{empty}
+
+\setcounter{footnote}{1}
+\cauthemail{}  % Dirección de correo electrónico del corresponding author
+\section{INTRODUCCIÓN}
+Las islas del Delta del Paraná comprenden los macrosistemas de humedales de orifen fluvial que se extienden desde la ciudad de Diamante hasta la Ciudad Autónoma de Buennos Aires, recorriendo aproximadamente 300 km de largo y confluye junto al Río Uruguay en el estuarioo del Río de la Plata. Ocupan una superficie de aproximadamente 1.7500.000 hectáreas y son calificadas como zonas bajas e inundables.\cite{acuario_del_rio_parana} La región es explotada para diversas actividades económicas, mayormente para la ganadería y la agricultura. \cite{Galperin_2013}
+
+Durante el periodo febrero - octubre del 2020 se produjeron enormes incendios, en los cuale se estima que 300.000 ha de las Islas del Delta se vieron afectadas.\cite{pagina_12} Según el Servicio Nacional del Manejo del Fuego, el 95\% de los incendios fueron productos de intervenciones humanas, principalmente para renovar los pastos para el pastoreo.\cite{SNMF_2020} Una situación similar se había vivido en el 2008, donde se vieron arrastradas más de 70.000 ha como consecuencia del fuego.\cite{quemas_2008}
+
+Los incendios a gran escala representan una fuente de gases y material particulado que se liberan al ambiente y son producidos por el propio proceso de combustión de materia orgánica. Entre estas particulas en suspensión se identificó hollín (carbono sin quemar), cenizas (minerales que no se queman) y otros productos de combustión incompleta.\cite{molinas_2020,global_solar_uv_index_2002}
+\section{MATERIALES Y MÉTODOS}
+
+\section{Coeficiente de proporcionalidad}
+
+\section{Ecuación de Herman}
+
+\section{Modelo TUV}
+
+\section{Cálculo de los TES}
+
+\section{RESULTADOS}
+
+\section{DISCUSIÓN Y CONCLUSIONES}
+
+\section{REFERENCIAS}
+%\bibliographystyle{abbrv} %orden alfabético 
+\bibliographystyle{aichej} %orden de mención
+\renewcommand{\refname}{}
+\bibliography{references}
+\end{document}

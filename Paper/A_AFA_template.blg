@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: A_AFA_template.aux
+The style file: aichej.bst
+Database file #1: references.bib
+Warning--missing publisher in global_solar_uv_index_2002
+You've used 7 entries,
+            2580 wiz_defined-function locations,
+            613 strings with 5862 characters,
+and the built_in function-call counts, 5363 in all, are:
+= -- 523
+> -- 34
+< -- 0
++ -- 16
+- -- 9
+* -- 471
+:= -- 619
+add.period$ -- 28
+call.type$ -- 7
+change.case$ -- 5
+chr.to.int$ -- 0
+cite$ -- 8
+duplicate$ -- 573
+empty$ -- 605
+format.name$ -- 11
+if$ -- 1190
+int.to.chr$ -- 0
+int.to.str$ -- 7
+missing$ -- 42
+newline$ -- 45
+num.names$ -- 6
+pop$ -- 83
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 31
+stack$ -- 0
+substring$ -- 849
+swap$ -- 94
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 1
+while$ -- 17
+width$ -- 8
+write$ -- 80
+(There was 1 warning)
