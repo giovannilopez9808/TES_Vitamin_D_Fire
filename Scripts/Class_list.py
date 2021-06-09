@@ -113,19 +113,17 @@ class OMI_data:
 
 class TUV_model:
     """
-    Clase que realiza la ejecucion del modelo TUV y acopla un AOD
-    dada un RD ,una medición y una fecha.
+    Clase que ejecuta el modelo TUV dados el ozono,
+    hora inicial, final, aod y fecha
     """
 
-    def __init__(self, date, ozone, data, aod_i, aod_f, RD, delta_RD, results):
-        self.delta_RD = delta_RD
-        self.results = results
+    def __init__(self, path, date, ozone, aod, hour_i, hour_f):
+        self.hour_i = hour_i
+        self.hour_f = hour_f
         self.ozone = ozone
-        self.aod_i = aod_i
-        self.aod_f = aod_f
-        self.data = data
         self.date = date
-        self.RD = RD
+        self.path = path
+        self.aod = aod
         self.obtain_yymmdd_from_date()
 
     def obtain_yymmdd_from_date(self):
@@ -137,77 +135,11 @@ class TUV_model:
 
     def run(self):
         """
-        Ejecucion del algoritmo de busqueda del AOD con el modelo TUv
+        Ejecucion del modelo TUv
         """
-        for date in self.data.index:
-            self.data_measurement = self.data[date]
-            if self.data_measurement != 0:
-                print("{}".format(date))
-                self.print_header_results()
-                run, attempt, print_bool = self.initialize_search()
-                self.obtain_hour_and_minute(date)
-                while run:
-                    self.obtain_aod()
-                    self.create_TUV_input()
-                    os.system("./TUV_model/tuv_rosario.out")
-                    self.results.read_results(self.outfile)
-                    RD = calculate_RD(self.data_measurement,
-                                      self.results.data[self.minute])
-                    run, print_bool = self.aod_binary_search(RD,
-                                                             run,
-                                                             print_bool)
-                    attempt += 1
-                    self.print_date_results(RD,
-                                            self.aod,
-                                            self.data_measurement,
-                                            self.results.data[self.minute])
-                    run = self.excess_of_attempts(attempt, run)
-                self.results.write_AOD_results(date,
-                                               self.aod,
-                                               RD,
-                                               print_bool)
-
-    def initialize_search(self):
-        """
-        Inicialización de los valores iniciales en el algoritmo de 
-        busqueda
-        """
-        self.aod_i_n = self.aod_i
-        self.aod_f_n = self.aod_f
-        run = True
-        attempt = 0
-        print_bool = False
-        return run, attempt, print_bool
-
-    def obtain_hour_and_minute(self, date):
-        """
-        Obtiene la hora inicial y final en la que se ejecutara el modelo
-        TUV a partir de la medición. Incluye el minuto en el cual se comparara
-        el valor de UVI
-        """
-        self.hour_i = date.hour  # -15/60
-        self.hour_f = self.hour_i+1
-        self.minute = date.minute//5
-
-    def aod_binary_search(self, RD, run, print_bool):
-        """
-        Decision del cambio en los limites de la busqueda del AOD
-        dependiendo la RD obtenida.
-        """
-        if RD > self.RD+self.delta_RD:
-            self.aod_i_n = self.aod
-        elif RD < self.RD-self.delta_RD:
-            self.aod_f_n = self.aod
-        else:
-            run = False
-            print_bool = True
-        return run, print_bool
-
-    def obtain_aod(self):
-        """
-        Calculo del AOD con el que se ejecutara el modelo TUV
-        """
-        self.aod = (self.aod_i_n+self.aod_f_n)/2
+        self.create_TUV_input()
+        os.system("./TUV_model/tuv_rosario.out")
+        self.read_results()
 
     def create_TUV_input(self):
         """
@@ -225,6 +157,97 @@ class TUV_model:
                                                             self.hour_i,
                                                             self.hour_f))
         input_file.close()
+
+    def read_results(self):
+        """
+        Lectura de los datos del TUV
+        """
+        skiprows = 132
+        self.hours, self.data = np.loadtxt("{}{}.txt".format(self.path,
+                                                             self.outfile),
+                                           skiprows=skiprows,
+                                           max_rows=12,
+                                           usecols=[0, 2],
+                                           unpack=True)
+
+
+class Search_AOD:
+    def __init__(self, path, hours, ozone, date, aod_i, aod_f, RD, delta_RD, data):
+        self.delta_RD = delta_RD
+        self.ozone = ozone
+        self.aod_i = aod_i
+        self.aod_f = aod_f
+        self.hours = hours
+        self.date = date
+        self.path = path
+        self.data = data
+        self.RD = RD
+
+    def run(self):
+        run, attempt = self.initialize_search()
+        self.print_header_results()
+        data_max = self.data.max()
+        while run:
+            self.obtain_aod()
+            TUV_model_results = self.run_for_all_hours()
+            TUV_max = round(TUV_model_results.max(), 1)
+            RD = calculate_RD(data_max,
+                              TUV_max)
+            attempt += 1
+            self.print_date_results(RD,
+                                    self.aod,
+                                    data_max,
+                                    TUV_max)
+            run = self.aod_binary_search(RD,
+                                         run)
+            run = self.excess_of_attempts(attempt,
+                                          run)
+
+    def initialize_search(self):
+        """
+        Inicialización de los valores iniciales en el algoritmo de 
+        busqueda
+        """
+        self.aod_i_n = self.aod_i
+        self.aod_f_n = self.aod_f
+        run = True
+        attempt = 0
+        return run, attempt
+
+    def run_for_all_hours(self):
+        TUV_model_results = np.array([])
+        for hour in self.hours:
+            hour_i = hour
+            hour_f = hour+1
+            TUV_model_script = TUV_model(self.path,
+                                         self.date,
+                                         self.ozone,
+                                         self.aod,
+                                         hour_i,
+                                         hour_f)
+            TUV_model_script.run()
+            TUV_model_results = np.append(TUV_model_results,
+                                          TUV_model_script.data)
+        return TUV_model_results
+
+    def aod_binary_search(self, RD, run):
+        """
+        Decision del cambio en los limites de la busqueda del AOD
+        dependiendo la RD obtenida.
+        """
+        if RD > self.RD+self.delta_RD:
+            self.aod_i_n = self.aod
+        elif RD < self.RD-self.delta_RD:
+            self.aod_f_n = self.aod
+        else:
+            run = False
+        return run
+
+    def obtain_aod(self):
+        """
+        Calculo del AOD con el que se ejecutara el modelo TUV
+        """
+        self.aod = (self.aod_i_n+self.aod_f_n)/2
 
     def excess_of_attempts(self, attempt, run):
         """
@@ -247,27 +270,18 @@ class TUV_model:
         """
         Escritura de los resultados en la terminal
         """
-        print("\t{:.2f}\t{:.3f}\t{:.3f}\t{:.3f}".format(RD,
+        print("\t{:.2f}\t{:.3f}\t{:.2f}\t{:.2f}".format(RD,
                                                         AOD,
                                                         measurement,
                                                         data))
 
 
-class TUV_Results:
+class Write_Results:
     def __init__(self, path):
         self.path = path
         self.path_file = path.replace("TUV/", "")
         self.write_AOD_results
         self.write_Header_Results_file()
-
-    def read_results(self, name):
-        skiprows = 132
-        self.hours, self.data = np.loadtxt("{}{}.txt".format(self.path,
-                                                             name),
-                                           skiprows=skiprows,
-                                           max_rows=13,
-                                           usecols=[0, 2],
-                                           unpack=True)
 
     def write_Header_Results_file(self):
         self.file_results = open("{}{}.csv".format(self.path_file,
