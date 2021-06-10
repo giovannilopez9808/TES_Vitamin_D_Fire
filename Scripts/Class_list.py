@@ -263,7 +263,7 @@ class Search_AOD:
         """
         print("\t{}\t{}\t{}\t{}".format("RD",
                                         "AOD",
-                                        "Davis",
+                                        "Data",
                                         "TUV"))
 
     def print_date_results(self, RD, AOD, measurement, data):

@@ -57,7 +57,7 @@ inputs = {
     "RD delta": 1,
     "AOD initial": 0,
     "AOD final": 0.6,
-    "source data": "No Davis",
+    "source data": "Davis",
 }
 if inputs["source data"] == "Davis":
     isdavis = True
@@ -72,9 +72,9 @@ hours = [hour for hour in range(inputs["hour initial"], inputs["hour final"])]
 for date in data_TUV.index:
     print("\n{}\n".format("="*50))
     print("Analizando fecha {}".format(date.date()))
-    data = obtain_data(isdavis,
-                       data,
-                       inputs)
+    data_date = obtain_data(isdavis,
+                            data,
+                            inputs)
     Search_script = Search_AOD(inputs["path results"],
                                hours,
                                data_TUV["Ozone"][date],
@@ -83,6 +83,6 @@ for date in data_TUV.index:
                                inputs["AOD final"],
                                inputs["RD limit"],
                                inputs["RD delta"],
-                               data)
+                               data_date)
     Search_script.run()
 print("="*50)
