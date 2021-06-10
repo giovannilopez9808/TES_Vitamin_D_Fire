@@ -3,8 +3,8 @@ from Class_list import *
 
 def read_dates_list(path, file):
     dates = pd.read_csv(path+file)
-    dates = [pd.to_datetime(date) for date in dates["Dates"]]
-    dates = pd.DataFrame(dates, columns=["Dates"])
+    dates = [pd.to_datetime(date) for date in dates["Date"]]
+    dates = pd.DataFrame(dates, columns=["Date"])
     return dates
 
 
@@ -27,7 +27,7 @@ def obtain_data_from_dates(data, dates):
 
 inputs = {
     "path data": "../Data/",
-    "file Dates": "dates_select.dat",
+    "file Dates": "dates_Maximum.csv",
     "file OMI": "data_OMI_OMT03",
     "path input TUV": "../Data/",
     "file input TUV": "dates_data.csv",
@@ -43,7 +43,7 @@ OMI = OMI_data(inputs["path data"],
                inputs["day final"])
 Ozone_data = obtain_ozone_data(OMI,
                                inputs["Ozone column"])
-Ozone_data = obtain_data_from_dates(Ozone_data, dates["Dates"])
+Ozone_data = obtain_data_from_dates(Ozone_data, dates["Date"])
 file_TUV = open(inputs["path input TUV"]+inputs["file input TUV"],
                 "w")
 file_TUV.write("Date,Ozone\n")
