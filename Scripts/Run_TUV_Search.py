@@ -56,7 +56,7 @@ inputs = {
     "RD limit": 10,
     "RD delta": 1,
     "AOD initial": 0,
-    "AOD final": 0.6,
+    "AOD final": 0.8,
     "source data": "Davis",
 }
 if inputs["source data"] == "Davis":
