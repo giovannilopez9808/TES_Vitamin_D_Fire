@@ -172,7 +172,9 @@ class TUV_model:
 
 
 class Search_AOD:
-    def __init__(self, path, hours, ozone, date, aod_i, aod_f, RD, delta_RD, data):
+    def __init__(self, path, hours, ozone, date, aod_i, aod_f, RD, delta_RD, data, attempt_limit, write_results):
+        self.attempt_limit = attempt_limit
+        self.write_results = write_results
         self.delta_RD = delta_RD
         self.ozone = ozone
         self.aod_i = aod_i
@@ -184,13 +186,13 @@ class Search_AOD:
         self.RD = RD
 
     def run(self):
-        run, attempt = self.initialize_search()
+        run, attempt, print = self.initialize_search()
         self.print_header_results()
         data_max = self.data.max()
         while run:
             self.obtain_aod()
             TUV_model_results = self.run_for_all_hours()
-            TUV_max = round(TUV_model_results.max(), 1)
+            TUV_max = round(TUV_model_results.max(), 3)
             RD = calculate_RD(data_max,
                               TUV_max)
             attempt += 1
@@ -198,8 +200,13 @@ class Search_AOD:
                                     self.aod,
                                     data_max,
                                     TUV_max)
-            run = self.aod_binary_search(RD,
-                                         run)
+            run, print = self.aod_binary_search(RD,
+                                                run,
+                                                print)
+            self.write_results.write_AOD_results(self.date.date(),
+                                                 self.aod,
+                                                 RD,
+                                                 print)
             run = self.excess_of_attempts(attempt,
                                           run)
 
@@ -210,9 +217,10 @@ class Search_AOD:
         """
         self.aod_i_n = self.aod_i
         self.aod_f_n = self.aod_f
+        print = False
         run = True
         attempt = 0
-        return run, attempt
+        return run, attempt, print
 
     def run_for_all_hours(self):
         TUV_model_results = np.array([])
@@ -230,7 +238,7 @@ class Search_AOD:
                                           TUV_model_script.data)
         return TUV_model_results
 
-    def aod_binary_search(self, RD, run):
+    def aod_binary_search(self, RD, run, print):
         """
         Decision del cambio en los limites de la busqueda del AOD
         dependiendo la RD obtenida.
@@ -241,7 +249,8 @@ class Search_AOD:
             self.aod_f_n = self.aod
         else:
             run = False
-        return run
+            print = True
+        return run, print
 
     def obtain_aod(self):
         """
@@ -253,7 +262,7 @@ class Search_AOD:
         """
         Limite de intentos en el algoritmo de busqueda
         """
-        if attempt >= 10:
+        if attempt >= self.attempt_limit:
             run = False
         return run
 
@@ -298,4 +307,4 @@ class Write_Results:
             self.file_results.write("{},{:.3f},{:.2f}\n".format(date,
                                                                 AOD,
                                                                 RD))
-            self.file_results.close()
+        self.file_results.close()

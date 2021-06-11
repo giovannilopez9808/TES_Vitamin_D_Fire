@@ -27,13 +27,15 @@ def obtain_data_from_dates(data, dates):
 
 inputs = {
     "path data": "../Data/",
-    "file Dates": "dates_Maximum.csv",
+    "file Dates": "dates_select.dat",
     "file OMI": "data_OMI_OMT03",
     "path input TUV": "../Data/",
     "file input TUV": "dates_data.csv",
     "day initial": "2020-05-11",
     "day final": "2020-09-30",
-    "Ozone column": "Ozone"
+    "Ozone column": "Ozone",
+    "Use OMI Ozone": False,
+    "Ozone value": 260,
 }
 dates = read_dates_list(inputs["path data"],
                         inputs["file Dates"])
@@ -48,7 +50,10 @@ file_TUV = open(inputs["path input TUV"]+inputs["file input TUV"],
                 "w")
 file_TUV.write("Date,Ozone\n")
 for date in Ozone_data.index:
-    ozone_value = Ozone_data[date]
+    if inputs["Use OMI Ozone"]:
+        ozone_value = Ozone_data[date]
+    else:
+        ozone_value = inputs["Ozone value"]
     date = date.date()
     file_TUV.write("{},{:.2f}\n".format(date,
                                         ozone_value))
