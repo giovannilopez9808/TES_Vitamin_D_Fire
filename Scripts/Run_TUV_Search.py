@@ -1,15 +1,15 @@
 from Class_list import *
 
 
-def read_data(isdavis, inputs):
+def read_data(isdavis, parameters):
     if isdavis:
-        data = Davis_data(inputs["path data"],
-                          inputs["file Davis"],
-                          inputs["day initial"],
-                          inputs["day final"])
+        data = Davis_data(parameters["path data"],
+                          parameters["file Davis"],
+                          parameters["day initial"],
+                          parameters["day final"])
     else:
-        data = pd.read_csv("{}{}".format(inputs["path data"],
-                                         inputs["file measurements"]))
+        data = pd.read_csv("{}{}".format(parameters["path data"],
+                                         parameters["file measurements"]))
         data = date_format(data)
     return data
 
@@ -31,19 +31,26 @@ def obtain_data_into_hours(data, hour_i, hour_f):
     return data
 
 
-def obtain_data(isdavis, data, inputs):
+def obtain_data(isdavis, data, parameters):
     if isdavis:
         data = obtain_data_per_day(data.data["UV"],
                                    date)
         data = obtain_data_into_hours(data,
-                                      inputs["hour initial"],
-                                      inputs["hour final"])
+                                      parameters["hour initial"],
+                                      parameters["hour final"])
     else:
         data = data["Maximum"][date]
     return data
 
 
-inputs = {
+def is_davids_data(parameters={}):
+    if parameters["source data"] == "Davis":
+        return True
+    else:
+        return False
+
+
+parameters = {
     "path data": "../Data/",
     "file data": "dates_data.csv",
     "file Davis": "data_Davis.csv",
@@ -60,33 +67,30 @@ inputs = {
     "AOD final": 4,
     "source data": "Davis",
 }
-if inputs["source data"] == "Davis":
-    isdavis = True
-else:
-    isdavis = False
+isdavis = is_davids_data(parameters)
 data = read_data(isdavis,
-                 inputs)
-data_TUV = pd.read_csv("{}{}".format(inputs["path data"],
-                                     inputs["file data"]))
+                 parameters)
+data_TUV = pd.read_csv("{}{}".format(parameters["path data"],
+                                     parameters["file data"]))
 data_TUV = date_format(data_TUV)
-hours = [hour for hour in range(inputs["hour initial"], inputs["hour final"])]
-write_file = Write_Results(inputs["path results"])
+hours = [hour for hour in range(parameters["hour initial"],
+                                parameters["hour final"])]
+write_file = Write_Results(parameters["path results"])
 for date in data_TUV.index:
     print("\n{}\n".format("="*50))
     print("Analizando fecha {}".format(date.date()))
     data_date = obtain_data(isdavis,
                             data,
-                            inputs)
-    Search_script = Search_AOD(inputs["path results"],
+                            parameters)
+    Search_script = Search_AOD(parameters["path results"],
                                hours,
                                data_TUV["Ozone"][date],
                                date,
-                               inputs["AOD initial"],
-                               inputs["AOD final"],
-                               inputs["RD limit"],
-                               inputs["RD delta"],
+                               parameters["AOD initial"],
+                               parameters["AOD final"],
+                               parameters["RD limit"],
+                               parameters["RD delta"],
                                data_date,
-                               inputs["Attempt limit"],
+                               parameters["Attempt limit"],
                                write_file)
-    Search_script.run()
 print("="*50)

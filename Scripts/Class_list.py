@@ -6,14 +6,15 @@ pd.options.mode.chained_assignment = None
 
 
 class Davis_data:
-    def __init__(self, path_data, file_name, day_initial, day_final):
+    def __init__(self, path_data="", file_name="", day_initial="2000-01-01", day_final="2001-01-01"):
         """
         Lectura de los datos de Davis recompilados.
-        Información de parametros:
-        path_data -------> Direccion donde se encuetran los datos
-        file_name -------> Nombre del archivo que contiene los datos
-        day_initial -----> Dia inicial del perido de analisis
-        day_final -------> Dia final del perido de analisis
+        
+        ### Inputs
+        + `path_data` -> Direccion donde se encuetran los datos
+        + `file_name` -> Nombre del archivo que contiene los datos
+        + `day_initial` -> Dia inicial del perido de analisis
+        + `day_final` -> Dia final del perido de analisis
         """
         self.path_data = path_data
         self.file_name = file_name
@@ -66,14 +67,15 @@ class Davis_data:
 
 
 class OMI_data:
-    def __init__(self, path_data, file_name, day_initial, day_final):
+    def __init__(self, path_data="", file_name="", day_initial="2000-01-01", day_final="2001-01-01"):
         """
         Lectura de los datos de OMI recompilados.
-        Información de parametros:
-        path_data -------> Direccion donde se encuetran los datos
-        file_name -------> Nombre del archivo que contiene los datos
-        day_initial -----> Dia inicial del perido de analisis
-        day_final -------> Dia final del perido de analisis
+
+        ### Inputs
+        + `path_data` -> Direccion donde se encuetran los datos
+        + `file_name` -> Nombre del archivo que contiene los datos
+        + `day_initial` -> Dia inicial del perido de analisis
+        + `day_final` -> Dia final del perido de analisis
         """
         self.path_data = path_data
         self.file_name = file_name
@@ -172,7 +174,25 @@ class TUV_model:
 
 
 class Search_AOD:
-    def __init__(self, path, hours, ozone, date, aod_i, aod_f, RD, delta_RD, data, attempt_limit, write_results):
+    """
+    Algoritmo de busqueda del AOD por medio del modelo TUV
+
+    #### Inputs
+    + `path` -> direccion donde se guardaran los resultados 
+    + `hours` -> lista con las horas que se obtendran los datos
+    + `ozone` -> valor de la columna de ozono en DU
+    + `date` -> fecha del analisis con formato pd.Timestamp()
+    + `aod_i` -> limite inferior de la busqueda de AOD
+    + `aod_f` -> limite superior de la busqueda de AOD
+    + `RD` -> RD en el cual se centra la busqueda
+    + `delta_RD` -> Ancho de la busquda del AOD
+    + `data` -> Dataframe con las mediociones de irradiancia
+    + `attempt_limit` -> Limite de intentos en la busqueda
+    + `write_results` -> Clase Write_Results que contiene todos los métodos para la escritura
+    de los resultados
+    """
+
+    def __init__(self, path="", hours=[], ozone=250.02, date=pd.Timestamp(), aod_i=0, aod_f=1, RD=10, delta_RD=1, data=pd.DataFrame(), attempt_limit=10, write_results=Write_Results):
         self.attempt_limit = attempt_limit
         self.write_results = write_results
         self.delta_RD = delta_RD
@@ -184,15 +204,25 @@ class Search_AOD:
         self.path = path
         self.data = data
         self.RD = RD
+        self.run()
 
     def run(self):
-        run, attempt, print = self.initialize_search()
+        """
+        Ejecución de la busqueda del AOD
+        """
+        # Inicializacion de las busqueda
+        run, attempt, print_bool = self.initialize_search()
         self.print_header_results()
+        # Maximo de los datos
         data_max = self.data.max()
         while run:
+            # Calculo del AOD con un promedio
             self.obtain_aod()
-            TUV_model_results = self.run_for_all_hours()
+            # Resultados del TUV
+            TUV_model_results = self.run_TUV_for_all_hours()
+            # Valor maximo del modelo TUV
             TUV_max = round(TUV_model_results.max(), 3)
+            # Calculo de la RD
             RD = calculate_RD(data_max,
                               TUV_max)
             attempt += 1
@@ -200,13 +230,16 @@ class Search_AOD:
                                     self.aod,
                                     data_max,
                                     TUV_max)
-            run, print = self.aod_binary_search(RD,
-                                                run,
-                                                print)
+            # Verificación si el RD esta en los limites de busqueda
+            run, print_bool = self.aod_binary_search(RD,
+                                                     run,
+                                                     print_bool)
+            # Imprime los resultados
             self.write_results.write_AOD_results(self.date.date(),
                                                  self.aod,
                                                  RD,
-                                                 print)
+                                                 print_bool)
+            # Se detendra si los intentos superar el limite
             run = self.excess_of_attempts(attempt,
                                           run)
 
@@ -217,12 +250,15 @@ class Search_AOD:
         """
         self.aod_i_n = self.aod_i
         self.aod_f_n = self.aod_f
-        print = False
+        print_bool = False
         run = True
         attempt = 0
-        return run, attempt, print
+        return run, attempt, print_bool
 
-    def run_for_all_hours(self):
+    def run_TUV_for_all_hours(self):
+        """
+        Ejecuccion del TUV con los parametros datos
+        """
         TUV_model_results = np.array([])
         for hour in self.hours:
             hour_i = hour
@@ -238,7 +274,7 @@ class Search_AOD:
                                           TUV_model_script.data)
         return TUV_model_results
 
-    def aod_binary_search(self, RD, run, print):
+    def aod_binary_search(self, RD=10, run=True, print_bool=True):
         """
         Decision del cambio en los limites de la busqueda del AOD
         dependiendo la RD obtenida.
@@ -249,8 +285,8 @@ class Search_AOD:
             self.aod_f_n = self.aod
         else:
             run = False
-            print = True
-        return run, print
+            print_bool = True
+        return run, print_bool
 
     def obtain_aod(self):
         """
@@ -258,7 +294,7 @@ class Search_AOD:
         """
         self.aod = (self.aod_i_n+self.aod_f_n)/2
 
-    def excess_of_attempts(self, attempt, run):
+    def excess_of_attempts(self, attempt=1, run=True):
         """
         Limite de intentos en el algoritmo de busqueda
         """
@@ -275,7 +311,7 @@ class Search_AOD:
                                         "Data",
                                         "TUV"))
 
-    def print_date_results(self, RD, AOD, measurement, data):
+    def print_date_results(self, RD=10, AOD=0.5, measurement=5, data=3):
         """
         Escritura de los resultados en la terminal
         """
@@ -286,20 +322,30 @@ class Search_AOD:
 
 
 class Write_Results:
-    def __init__(self, path):
+    """
+    Contiene los metodos para escribir los resultados de la busqueda del AOD
+    """
+
+    def __init__(self, path=""):
         self.path = path
         self.path_file = path.replace("TUV/", "")
         self.write_AOD_results
         self.write_Header_Results_file()
 
     def write_Header_Results_file(self):
+        """
+        Escritura del Header de los archivos de resultados
+        """
         self.file_results = open("{}{}.csv".format(self.path_file,
                                                    "Dates_AOD"),
                                  "w")
         self.file_results.write("Date,AOD,RD\n")
         self.file_results.close()
 
-    def write_AOD_results(self, date, AOD, RD, print_bool):
+    def write_AOD_results(self, date=pd.Timestamp(), AOD=0.5, RD=10, print_bool=True):
+        """
+        Escritura de los resultados de ls busqueda de AOD
+        """
         if print_bool:
             self.file_results = open("{}{}.csv".format(self.path_file,
                                                        "Dates_AOD"),
