@@ -9,7 +9,7 @@ class Davis_data:
     def __init__(self, path_data="", file_name="", day_initial="2000-01-01", day_final="2001-01-01"):
         """
         Lectura de los datos de Davis recompilados.
-        
+
         ### Inputs
         + `path_data` -> Direccion donde se encuetran los datos
         + `file_name` -> Nombre del archivo que contiene los datos
@@ -192,7 +192,7 @@ class Search_AOD:
     de los resultados
     """
 
-    def __init__(self, path="", hours=[], ozone=250.02, date=pd.Timestamp(), aod_i=0, aod_f=1, RD=10, delta_RD=1, data=pd.DataFrame(), attempt_limit=10, write_results=Write_Results):
+    def __init__(self, path="", hours=[], ozone=250.02, date=pd.Timestamp(2000, 1, 1), aod_i=0, aod_f=1, RD=10, delta_RD=1, data=pd.DataFrame(), attempt_limit=10, write_results=""):
         self.attempt_limit = attempt_limit
         self.write_results = write_results
         self.delta_RD = delta_RD
@@ -342,7 +342,7 @@ class Write_Results:
         self.file_results.write("Date,AOD,RD\n")
         self.file_results.close()
 
-    def write_AOD_results(self, date=pd.Timestamp(), AOD=0.5, RD=10, print_bool=True):
+    def write_AOD_results(self, date=pd.Timestamp(2000, 1, 1), AOD=0.5, RD=10, print_bool=True):
         """
         Escritura de los resultados de ls busqueda de AOD
         """
