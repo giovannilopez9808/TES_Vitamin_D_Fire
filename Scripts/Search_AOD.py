@@ -9,7 +9,7 @@ def read_data(isdavis, parameters):
                           parameters["day final"])
     else:
         data = pd.read_csv("{}{}".format(parameters["path data"],
-                                         parameters["file measurements"]))
+                                         parameters["file No Davis"]))
         data = date_format(data)
     return data
 
@@ -31,7 +31,7 @@ def obtain_data_into_hours(data, hour_i, hour_f):
     return data
 
 
-def obtain_data(isdavis, data, parameters):
+def obtain_data(isdavis, data, parameters, date):
     if isdavis:
         data = obtain_data_per_day(data.data["UV"],
                                    date)
@@ -50,11 +50,18 @@ def is_davids_data(parameters={}):
         return False
 
 
+def select_dates(isdavis, data, data_TUV):
+    if isdavis:
+        return data_TUV.index
+    else:
+        return data.index
+
+
 parameters = {
     "path data": "../Data/",
     "file data": "dates_data.csv",
     "file Davis": "data_Davis.csv",
-    "file measurements": "dates_Maximum.csv",
+    "file No Davis": "dates_Maximum.csv",
     "path results": "../Results/TUV/",
     "day initial": "2020-05-01",
     "day final": "2020-09-30",
@@ -76,15 +83,19 @@ data_TUV = date_format(data_TUV)
 hours = [hour for hour in range(parameters["hour initial"],
                                 parameters["hour final"])]
 write_file = Write_Results(parameters["path results"])
-for date in data_TUV.index:
+dates = select_dates(isdavis,
+                     data,
+                     data_TUV)
+for date in dates:
     print("\n{}\n".format("="*50))
     print("Analizando fecha {}".format(date.date()))
     data_date = obtain_data(isdavis,
                             data,
-                            parameters)
+                            parameters,
+                            date)
     Search_script = Search_AOD(parameters["path results"],
                                hours,
-                               data_TUV["Ozone"][date],
+                               260,
                                date,
                                parameters["AOD initial"],
                                parameters["AOD final"],

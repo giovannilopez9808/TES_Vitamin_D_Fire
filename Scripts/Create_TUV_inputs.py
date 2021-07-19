@@ -5,6 +5,9 @@ def read_dates_list(path, file):
     dates = pd.read_csv(path+file)
     dates = [pd.to_datetime(date) for date in dates["Date"]]
     dates = pd.DataFrame(dates, columns=["Date"])
+    dates.index = pd.to_datetime(dates["Date"])
+    dates = dates.drop("Date",
+                       1)
     return dates
 
 
@@ -34,7 +37,7 @@ inputs = {
     "day initial": "2020-05-11",
     "day final": "2020-09-30",
     "Ozone column": "Ozone",
-    "Use OMI Ozone": True,
+    "Use OMI Ozone": False,
     "Ozone value": 260,
 }
 dates = read_dates_list(inputs["path data"],
@@ -45,14 +48,19 @@ OMI = OMI_data(inputs["path data"],
                inputs["day final"])
 Ozone_data = obtain_ozone_data(OMI,
                                inputs["Ozone column"])
-Ozone_data = obtain_data_from_dates(Ozone_data, dates["Date"])
-file_TUV = open(inputs["path input TUV"]+inputs["file input TUV"],
+Ozone_data = obtain_data_from_dates(Ozone_data,
+                                    dates.index)
+file_TUV = open("{}{}".format(inputs["path input TUV"],
+                              inputs["file input TUV"]),
                 "w")
 file_TUV.write("Date,Ozone\n")
-for date in Ozone_data.index:
-    if inputs["Use OMI Ozone"]:
-        ozone_value = Ozone_data[date]
-    else:
+for date in dates.index:
+    try:
+        if inputs["Use OMI Ozone"]:
+            ozone_value = Ozone_data[date]
+        else:
+            ozone_value = inputs["Ozone value"]
+    except:
         ozone_value = inputs["Ozone value"]
     date = date.date()
     file_TUV.write("{},{:.2f}\n".format(date,

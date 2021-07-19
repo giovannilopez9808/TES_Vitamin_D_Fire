@@ -236,6 +236,7 @@ class Search_AOD:
                                                      print_bool)
             # Imprime los resultados
             self.write_results.write_AOD_results(self.date.date(),
+                                                 self.ozone,
                                                  self.aod,
                                                  RD,
                                                  print_bool)
@@ -342,7 +343,7 @@ class Write_Results:
         self.file_results.write("Date,AOD,RD\n")
         self.file_results.close()
 
-    def write_AOD_results(self, date=pd.Timestamp(2000, 1, 1), AOD=0.5, RD=10, print_bool=True):
+    def write_AOD_results(self, date=pd.Timestamp(2000, 1, 1), ozone=260.05, AOD=0.5, RD=10, print_bool=True):
         """
         Escritura de los resultados de ls busqueda de AOD
         """
@@ -351,6 +352,7 @@ class Write_Results:
                                                        "Dates_AOD"),
                                      "a")
             self.file_results.write("{},{:.3f},{:.2f}\n".format(date,
+                                                                ozone,
                                                                 AOD,
                                                                 RD))
         self.file_results.close()
