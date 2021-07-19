@@ -340,7 +340,7 @@ class Write_Results:
         self.file_results = open("{}{}.csv".format(self.path_file,
                                                    "Dates_AOD"),
                                  "w")
-        self.file_results.write("Date,AOD,RD\n")
+        self.file_results.write("Date,Ozone,AOD,RD\n")
         self.file_results.close()
 
     def write_AOD_results(self, date=pd.Timestamp(2000, 1, 1), ozone=260.05, AOD=0.5, RD=10, print_bool=True):
