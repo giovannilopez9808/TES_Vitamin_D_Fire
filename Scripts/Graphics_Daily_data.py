@@ -15,8 +15,8 @@ def read_dates_select(path, name):
 
 
 def select_only_in_the_period(data, date_i, date_f):
-    data = data[data["Dates"] >= date_i]
-    data = data[data["Dates"] <= date_f]
+    data = data[data["Date"] >= date_i]
+    data = data[data["Date"] <= date_f]
     return data
 
 
@@ -70,37 +70,35 @@ def obtain_tick(date):
     return ticks, hour_tick
 
 
-inputs = {
+parameters = {
     "Dates clear sky": "dates_select.dat",
     "path data": "../Data/",
     "file Davis": "data_Davis.csv",
     "file OMI": "data_OMI_OMT03",
-    "day initial": "2020-08-01",
-    "day final": "2020-09-30",
+    "day initial": "2020-07-31",
+    "day final": "2020-06-28",
     "Cloud factor column": "Cld. F."
 }
-Davis = Davis_data(inputs["path data"],
-                   inputs["file Davis"],
-                   inputs["day initial"],
-                   inputs["day final"])
-OMI = OMI_data(inputs["path data"],
-               inputs["file OMI"],
-               inputs["day initial"],
-               inputs["day final"])
-dates_select = read_dates_select(inputs["path data"],
-                                 inputs["Dates clear sky"])
-dates_select = select_only_in_the_period(dates_select,
-                                         inputs["day initial"],
-                                         inputs["day final"])
-print(dates_select)
+parameters["day final"] = parameters["day initial"]
+Davis = Davis_data(parameters["path data"],
+                   parameters["file Davis"],
+                   parameters["day initial"],
+                   parameters["day final"])
+OMI = OMI_data(parameters["path data"],
+               parameters["file OMI"],
+               parameters["day initial"],
+               parameters["day final"])
 # Obtiene el promedio diario de Cloud Factor
-Cf_data = obtain_daily_mean(OMI.data[inputs["Cloud factor column"]])
-for date in dates_select["Dates"]:
-    # Valor diario del cloud factor
-    Cf_value = Cf_data[date]
-    # Lista de los datos diarios UVI para una fecha
-    daily_data = Davis.data[Davis.data.index.date == pd.to_datetime(date)]
-    # Ploteo de los datos diarios
-    plot_daily_data(daily_data,
-                    date,
-                    Cf_value)
+Cf_data = obtain_daily_mean(OMI.data[parameters["Cloud factor column"]])
+# Valor diario del cloud factor
+try:
+    Cf_value = Cf_data[parameters["day initial"]]
+except:
+    Cf_value = -1
+# Lista de los datos diarios UVI para una fecha
+daily_data = Davis.data[Davis.data.index.date ==
+                        pd.to_datetime(parameters["day initial"])]
+# Ploteo de los datos diarios
+plot_daily_data(daily_data,
+                parameters["day initial"],
+                Cf_value)

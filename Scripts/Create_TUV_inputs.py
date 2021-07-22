@@ -30,7 +30,7 @@ def obtain_data_from_dates(data, dates):
 
 inputs = {
     "path data": "../Data/",
-    "file Dates": "dates_select.dat",
+    "file Dates": "dates_select_2.dat",
     "file OMI": "data_OMI_OMT03",
     "path input TUV": "../Data/",
     "file input TUV": "dates_data.csv",
