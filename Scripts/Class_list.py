@@ -169,7 +169,10 @@ class TUV_model:
                                                              self.outfile),
                                            skiprows=skiprows,
                                            max_rows=12,
-                                           usecols=[0, 2],
+                                           # For UV Index
+                                           #usecols=[0, 2],
+                                           # For vitamin D
+                                           usecols=[0, 3],
                                            unpack=True)
 
 

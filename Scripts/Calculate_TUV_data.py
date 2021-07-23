@@ -33,8 +33,8 @@ def which_AOD(parameters={}, data=pd.DataFrame(), date=pd.Timestamp(2000, 1, 1))
 parameters = {"path data": "../Results/",
               "file data": "Dates_AOD.csv",
               "path results": "../Results/TUV/",
-              "which AOD": "0.35",
-              # "which AOD": "TUV",
+              # "which AOD": "0.35",
+              "which AOD": "TUV",
               "hour initial": 6,
               "hour final": 20}
 data = read_data(parameters["path data"],
