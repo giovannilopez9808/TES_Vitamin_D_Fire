@@ -8,13 +8,13 @@ def read_TUV_input(parameters={}):
     return data
 
 
-def date_format(data):
+def date_format(data=pd.DataFrame()):
     data.index = pd.to_datetime(data["Date"])
     data = data.drop("Date", 1)
     return data
 
 
-def obtain_data(data, parameters, date):
+def obtain_data(data=pd.DataFrame(), parameters={}, date=pd.Timestamp(2000, 1, 1)):
     data = obtain_data_per_day(data.data["UV"],
                                date)
     data = obtain_data_into_hours(data,
@@ -23,12 +23,12 @@ def obtain_data(data, parameters, date):
     return data
 
 
-def obtain_data_per_day(data, date):
+def obtain_data_per_day(data=pd.DataFrame(), date=pd.Timestamp(2000, 1, 1)):
     data = data[data.index.date == date]
     return data
 
 
-def obtain_data_into_hours(data, hour_i, hour_f):
+def obtain_data_into_hours(data=pd.DataFrame(), hour_i=0, hour_f=24):
     data = data[data.index.hour >= hour_i]
     data = data[data.index.hour < hour_f]
     return data
