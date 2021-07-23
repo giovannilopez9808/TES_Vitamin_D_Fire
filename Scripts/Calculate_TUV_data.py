@@ -21,24 +21,39 @@ def print_header_terminal(date):
     print(text)
 
 
+def which_AOD(parameters={}, data=pd.DataFrame(), date=pd.Timestamp(2000, 1, 1)):
+    dataset = {"0.35": {"Filename": "clear_sky",
+                        "AOD": 0.35},
+               "TUV": {"Filename": "binary_search",
+                       "AOD": data["AOD"][date]}
+               }
+    return dataset[parameters["which AOD"]]
+
+
 parameters = {"path data": "../Results/",
               "file data": "Dates_AOD.csv",
               "path results": "../Results/TUV/",
-              "hour initial": 7,
-              "hour final": 19}
+              "which AOD": "0.35",
+              # "which AOD": "TUV",
+              "hour initial": 6,
+              "hour final": 20}
 data = read_data(parameters["path data"],
                  parameters["file data"])
 for date in data.index:
+    dataset = which_AOD(parameters,
+                        data,
+                        date)
     print_header_terminal(date)
-    file = open("{}{}.csv".format(parameters["path results"],
-                                  date.date()),
+    file = open("{}{}_{}.csv".format(parameters["path results"],
+                                     date.date(),
+                                     dataset["Filename"]),
                 "w")
     file.write("Hour,Data\n")
     for hour in range(parameters["hour initial"], parameters["hour final"]):
         TUV = TUV_model(parameters["path results"],
                         date,
                         data["Ozone"][date],
-                        data["AOD"][date],
+                        dataset["AOD"],
                         hour,
                         hour+1)
         TUV.run()
