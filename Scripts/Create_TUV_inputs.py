@@ -50,7 +50,7 @@ Ozone_data = obtain_data_from_dates(Ozone_data,
 file_TUV = open("{}{}".format(parameters["path input TUV"],
                               parameters["file input TUV"]),
                 "w")
-file_TUV.write("Date,Ozone\n")
+file_TUV.write("Date,Ozone,RD,Delta\n")
 for date in data_input.index:
     try:
         if parameters["Use OMI Ozone"]:

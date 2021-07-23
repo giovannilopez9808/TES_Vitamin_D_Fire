@@ -1,14 +1,6 @@
 from Class_list import *
 
 
-def read_Davis_data(parameters={}):
-    data = Davis_data(parameters["path data"],
-                      parameters["file Davis"],
-                      parameters["day initial"],
-                      parameters["day final"])
-    return data
-
-
 def read_TUV_input(parameters={}):
     data = pd.read_csv("{}{}".format(parameters["path data"],
                                      parameters["file data"]))
@@ -55,8 +47,11 @@ parameters = {"path data": "../Data/",
               "AOD final": 4,
               "source data": "Davis",
               }
-data = read_Davis_data(parameters)
 TUV_data_input = read_TUV_input(parameters)
+data = Davis_data(parameters["path data"],
+                  parameters["file Davis"],
+                  parameters["day initial"],
+                  parameters["day final"])
 hours = [hour for hour in range(parameters["hour initial"],
                                 parameters["hour final"])]
 write_file = Write_Results(parameters["path results"])
