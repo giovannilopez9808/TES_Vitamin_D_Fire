@@ -351,8 +351,8 @@ class Write_Results:
             self.file_results = open("{}{}.csv".format(self.path_file,
                                                        "Dates_AOD"),
                                      "a")
-            self.file_results.write("{},{:.3f},{:.2f}\n".format(date,
-                                                                ozone,
-                                                                AOD,
-                                                                RD))
+            self.file_results.write("{},{:.3f},{:.3f},{}\n".format(date,
+                                                                   ozone,
+                                                                   AOD,
+                                                                   RD))
         self.file_results.close()
