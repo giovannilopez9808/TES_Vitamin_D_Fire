@@ -5,7 +5,7 @@ lat =        -32.920   lon =        -60.780   tmzone =        -3.0
 iyear =         2016   imonth =           1   iday =             9
 zstart =       0.025   zstop =       80.000   nz =              81
 wstart =     280.000   wstop =      400.000   nwint =          120
-tstart =      10.000   tstop =       15.000   nt =              13
+tstart =      10.000   tstop =       15.000   nt =              61
 lzenit =           F   alsurf =       0.080   psurf =       -999.0
 o3col =      228.380   so2col =       0.000   no2col =       0.100
 taucld =       0.000   zbase =        4.000   ztop =         5.000

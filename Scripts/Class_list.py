@@ -35,7 +35,7 @@ class Davis_data:
         # Eliminacion de columnas que no son el UV
         self.obtain_only_UV_data()
         # Corte de los datos por el perido de las fechas
-        self.cut_data_from_dates()
+        self.select_data_from_dates()
 
     def format_data_date(self):
         """
@@ -57,7 +57,7 @@ class Davis_data:
         columns.remove("UV")
         self.data = self.data.drop(columns, 1)
 
-    def cut_data_from_dates(self):
+    def select_data_from_dates(self):
         """
         Funcion que corta los datos en un periodo
         """
@@ -92,7 +92,7 @@ class OMI_data:
                                                   self.file_name),
                                 skiprows=27)
         self.date_format()
-        self.cut_data_from_dates()
+        self.select_data_from_dates()
 
     def date_format(self):
         """
@@ -104,7 +104,7 @@ class OMI_data:
         self.data.index = self.data["Date"]
         self.data = self.data.drop(["Date", "Datetime"], 1)
 
-    def cut_data_from_dates(self):
+    def select_data_from_dates(self):
         """
         Funcion que corta los datos en un periodo
         """
@@ -119,7 +119,8 @@ class TUV_model:
     hora inicial, final, aod y fecha
     """
 
-    def __init__(self, path, date, ozone, aod, hour_i, hour_f):
+    def __init__(self, path, date, ozone, aod, hour_i, hour_f, max_rows=60):
+        self.max_rows = max_rows
         self.hour_i = hour_i
         self.hour_f = hour_f
         self.ozone = ozone
@@ -140,7 +141,7 @@ class TUV_model:
         Ejecucion del modelo TUv
         """
         self.create_TUV_input()
-        os.system("./TUV_model/tuv_rosario.out")
+        os.system("./TUV_model/tuv.out")
         self.read_results()
 
     def create_TUV_input(self):
@@ -165,15 +166,12 @@ class TUV_model:
         Lectura de los datos del TUV
         """
         skiprows = 132
-        self.hours, self.data = np.loadtxt("{}{}.txt".format(self.path,
-                                                             self.outfile),
-                                           skiprows=skiprows,
-                                           max_rows=12,
-                                           # For UV Index
-                                           #usecols=[0, 2],
-                                           # For vitamin D
-                                           usecols=[0, 3],
-                                           unpack=True)
+        self.hours, self.uvi, self.vitamin = np.loadtxt("{}{}.txt".format(self.path,
+                                                                          self.outfile),
+                                                        skiprows=skiprows,
+                                                        max_rows=self.max_rows,
+                                                        usecols=[0, 2, 3],
+                                                        unpack=True)
 
 
 class Search_AOD:
@@ -275,7 +273,7 @@ class Search_AOD:
                                          hour_f)
             TUV_model_script.run()
             TUV_model_results = np.append(TUV_model_results,
-                                          TUV_model_script.data)
+                                          TUV_model_script.uvi)
         return TUV_model_results
 
     def aod_binary_search(self, RD=10, run=True, print_bool=True):
