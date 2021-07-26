@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def cut_data_from_date_period(data, day_initial, day_final):
+def select_data_from_date_period(data, day_initial, day_final):
     data = data[data.index.date >= day_initial]
     data = data[data.index.date <= day_final]
     return data
@@ -18,3 +18,48 @@ def date_to_yymmdd(date):
 def calculate_RD(measurement, model):
     RD = (model-measurement)*100/measurement
     return RD
+
+
+def obtain_xticks(dates):
+    months = [obtain_first_date_for_month(dates[0])]
+    for date in dates:
+        if months[-1].month != date.month:
+            date = obtain_first_date_for_month(date)
+            months.append(date)
+    year = months[-1].year
+    month = months[-1].month+1
+    if month > 12:
+        month = 1
+        year += 1
+    date = obtain_first_date_for_month(months[-1])
+    months.append(date)
+    months_names = obtain_month_names(months)
+    return months, months_names
+
+
+def obtain_first_date_for_month(date):
+    year = date.year
+    month = date.month
+    date = pd.to_datetime("{}-{}-01".format(year,
+                                            str(month).zfill(2)))
+    return date
+
+
+def obtain_month_names(dates):
+    months_names = []
+    for date in dates:
+        months_names.append(date.strftime("%b"))
+    return months_names
+
+
+def read_data(path="", file=""):
+    data = pd.read_csv("{}{}".format(path,
+                                     file))
+    data = format_data(data)
+    return data
+
+
+def format_data(data: pd.DataFrame()):
+    data.index = pd.to_datetime(data["Date"])
+    data = data.drop("Date", 1)
+    return data
