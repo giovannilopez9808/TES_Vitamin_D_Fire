@@ -61,9 +61,9 @@ class Davis_data:
         """
         Funcion que corta los datos en un periodo
         """
-        self.data = cut_data_from_date_period(self.data,
-                                              self.day_initial,
-                                              self.day_final)
+        self.data = select_data_from_date_period(self.data,
+                                                 self.day_initial,
+                                                 self.day_final)
 
 
 class OMI_data:
@@ -108,9 +108,9 @@ class OMI_data:
         """
         Funcion que corta los datos en un periodo
         """
-        self.data = cut_data_from_date_period(self.data,
-                                              self.day_initial,
-                                              self.day_final)
+        self.data = select_data_from_date_period(self.data,
+                                                 self.day_initial,
+                                                 self.day_final)
 
 
 class TUV_model:
@@ -166,11 +166,11 @@ class TUV_model:
         Lectura de los datos del TUV
         """
         skiprows = 132
-        self.hours, self.sza,self.uvi, self.vitamin = np.loadtxt("{}{}.txt".format(self.path,
-                                                                          self.outfile),
-                                                        skiprows=skiprows,
-                                                        max_rows=self.max_rows,
-                                                        unpack=True)
+        self.hours, self.sza, self.uvi, self.vitamin = np.loadtxt("{}{}.txt".format(self.path,
+                                                                                    self.outfile),
+                                                                  skiprows=skiprows,
+                                                                  max_rows=self.max_rows,
+                                                                  unpack=True)
 
 
 class Search_AOD:
