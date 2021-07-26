@@ -166,11 +166,10 @@ class TUV_model:
         Lectura de los datos del TUV
         """
         skiprows = 132
-        self.hours, self.uvi, self.vitamin = np.loadtxt("{}{}.txt".format(self.path,
+        self.hours, self.sza,self.uvi, self.vitamin = np.loadtxt("{}{}.txt".format(self.path,
                                                                           self.outfile),
                                                         skiprows=skiprows,
                                                         max_rows=self.max_rows,
-                                                        usecols=[0, 2, 3],
                                                         unpack=True)
 
 

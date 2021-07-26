@@ -1,5 +1,6 @@
 from Class_list import TUV_model
 import pandas as pd
+import os
 
 
 def read_data(path="", file=""):
@@ -59,7 +60,7 @@ for date in data.index:
                                      date.date(),
                                      dataset["Filename"]),
                 "w")
-    file.write("Hour,UVI,Vitamin D\n")
+    file.write("Hour,SZA,UVI,Vitamin D\n")
     for hour in range(parameters["hour initial"], parameters["hour final"]):
         TUV = TUV_model(parameters["path results"],
                         date,
@@ -69,9 +70,11 @@ for date in data.index:
                         hour+1,
                         parameters["max rows"])
         TUV.run()
-        for TUV_hour, TUV_uvi, TUV_vitamin in zip(TUV.hours, TUV.uvi, TUV.vitamin):
-            file.write("{},{},{}\n".format(TUV_hour,
-                                           TUV_uvi,
-                                           TUV_vitamin))
+        for TUV_hour, TUV_sza, TUV_uvi, TUV_vitamin in zip(TUV.hours, TUV.sza, TUV.uvi, TUV.vitamin):
+            file.write("{},{},{},{}\n".format(TUV_hour,
+                                              TUV_sza,
+                                              TUV_uvi,
+                                              TUV_vitamin))
     file.close()
+os.system("rm {}*.txt".format(parameters["path results"]))
 print("\n")
