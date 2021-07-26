@@ -38,14 +38,14 @@ def which_AOD(parameters={}, data=pd.DataFrame(), date=pd.Timestamp(2000, 1, 1))
 
 
 parameters = {
-    # "path data": "../Results/",
-    # "file data": "Dates_AOD.csv",
-    "path data": "../Data/",
-    "file data": "Ozone_data.csv",
+    "path data": "../Results/",
+    "file data": "Dates_AOD.csv",
+    # "path data": "../Data/",
+    # "file data": "Ozone_data.csv",
     "path results": "../Results/TUV/",
     # "which AOD": "0.30",
-    # "which AOD": "TUV",
-    "which AOD": "OMI",
+    "which AOD": "TUV",
+    # "which AOD": "OMI",
     "hour initial": 11,
     "hour final": 19,
     "max rows": 60}
