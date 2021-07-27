@@ -27,10 +27,10 @@ def obtain_data_from_dates(data, dates):
 
 
 parameters = {"path data": "../Data/",
-              "file Dates": "dates_select_2.dat",
+              "file Dates": "dates_select.dat",
               "file OMI": "data_OMI_OMT03",
               "path input TUV": "../Data/",
-              "file input TUV": "TUV_dates_input.csv",
+              "file input TUV": "Search_AOD_input.csv",
               "day initial": "2020-05-11",
               "day final": "2020-09-30",
               "Ozone column": "Ozone",
