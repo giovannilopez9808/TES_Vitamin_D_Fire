@@ -23,10 +23,12 @@ parameters = {"path data": "../Data/",
               # The first dataset is used for set the xticks
               "dataset parameters": {"dataset 1": {"dataset AOD": "Binary search",
                                                    "dataset Ozone": "OMI"},
-                                     "dataset 2": {"dataset AOD": "Binary search",
-                                                   "dataset Ozone": "260"},
-                                     "dataset 3": {"dataset AOD": "0.30",
-                                                   "dataset Ozone": "260"},
+                                     #  "dataset 2": {"dataset AOD": "Binary search",
+                                     #                "dataset Ozone": "260"},
+                                     #  "dataset 3": {"dataset AOD": "0.30",
+                                     #                "dataset Ozone": "260"},
+                                     "dataset 4": {"dataset AOD": "0.30",
+                                                   "dataset Ozone": "OMI"},
                                      },
               }
 for i, dataset in enumerate(parameters["dataset parameters"]):
@@ -36,9 +38,9 @@ for i, dataset in enumerate(parameters["dataset parameters"]):
     data = read_data(parameters["path data"],
                      "{}{}.csv".format(parameters["file data"],
                                        ID))
-    plt.plot(data.index, data[parameters["dataset doses"]],
-             label=title,
-             lw=1.5)
+    plt.scatter(data.index, data[parameters["dataset doses"]],
+                label=title,
+                lw=1.5)
     if i == 0:
         months, months_names = obtain_xticks(data.index)
         plt.xticks(months,
