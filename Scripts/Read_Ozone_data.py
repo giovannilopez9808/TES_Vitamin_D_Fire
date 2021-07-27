@@ -33,8 +33,8 @@ def obtain_mean(numero1, numero2):
 parameters = {"path data": "../Data/",
               "Ozone data": "data_OMI_OMT03",
               "file results": "Ozone_data.csv",
-              "date initial": "2019-06-01",
-              "date final": "2020-08-31"}
+              "date initial": "2019-04-01",
+              "date final": "2020-10-01"}
 OMI = OMI_data(parameters["path data"],
                parameters["Ozone data"],
                parameters["date initial"],

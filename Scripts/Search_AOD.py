@@ -37,7 +37,7 @@ def obtain_data_into_hours(data=pd.DataFrame(), hour_i=0, hour_f=24):
 parameters = {"path data": "../Data/",
               "file data": "TUV_dates_input.csv",
               "file Davis": "data_Davis.csv",
-              "path results": "../Results/TUV/",
+              "path TUV results": "../Results/TUV/",
               "day initial": "2020-05-01",
               "day final": "2020-09-30",
               "Attempt limit": 15,
@@ -54,14 +54,14 @@ data = Davis_data(parameters["path data"],
                   parameters["day final"])
 hours = [hour for hour in range(parameters["hour initial"],
                                 parameters["hour final"])]
-write_file = Write_Results(parameters["path results"])
+write_file = Write_Results(parameters["path data"])
 for date in TUV_data_input.index:
     print("\n{}\n".format("="*50))
     print("Analizando fecha {}".format(date.date()))
     data_date = obtain_data(data,
                             parameters,
                             date)
-    Search_script = Search_AOD(parameters["path results"],
+    Search_script = Search_AOD(parameters["path TUV results"],
                                hours,
                                TUV_data_input["Ozone"][date],
                                date,

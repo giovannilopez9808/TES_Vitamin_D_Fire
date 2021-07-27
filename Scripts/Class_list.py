@@ -192,7 +192,7 @@ class Search_AOD:
     de los resultados
     """
 
-    def __init__(self, path="", hours=[], ozone=250.02, date=pd.Timestamp(2000, 1, 1), aod_i=0, aod_f=1, RD=10, delta_RD=1, data=pd.DataFrame(), attempt_limit=10, write_results=""):
+    def __init__(self, TUV_path="", hours=[], ozone=250.02, date=pd.Timestamp(2000, 1, 1), aod_i=0, aod_f=1, RD=10, delta_RD=1, data=pd.DataFrame(), attempt_limit=10, write_results=""):
         self.attempt_limit = attempt_limit
         self.write_results = write_results
         self.delta_RD = delta_RD
@@ -201,7 +201,7 @@ class Search_AOD:
         self.aod_f = aod_f
         self.hours = hours
         self.date = date
-        self.path = path
+        self.TUV_path = TUV_path
         self.data = data
         self.RD = RD
         self.run()
@@ -264,7 +264,7 @@ class Search_AOD:
         for hour in self.hours:
             hour_i = hour
             hour_f = hour+1
-            TUV_model_script = TUV_model(self.path,
+            TUV_model_script = TUV_model(self.TUV_path,
                                          self.date,
                                          self.ozone,
                                          self.aod,
@@ -329,7 +329,6 @@ class Write_Results:
 
     def __init__(self, path=""):
         self.path = path
-        self.path_file = path.replace("TUV/", "")
         self.write_AOD_results
         self.write_Header_Results_file()
 
@@ -337,7 +336,7 @@ class Write_Results:
         """
         Escritura del Header de los archivos de resultados
         """
-        self.file_results = open("{}{}.csv".format(self.path_file,
+        self.file_results = open("{}{}.csv".format(self.path,
                                                    "Dates_AOD"),
                                  "w")
         self.file_results.write("Date,Ozone,AOD,RD\n")
@@ -348,7 +347,7 @@ class Write_Results:
         Escritura de los resultados de ls busqueda de AOD
         """
         if print_bool:
-            self.file_results = open("{}{}.csv".format(self.path_file,
+            self.file_results = open("{}{}.csv".format(self.path,
                                                        "Dates_AOD"),
                                      "a")
             self.file_results.write("{},{:.3f},{:.3f},{:.2f}\n".format(date,

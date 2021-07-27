@@ -8,8 +8,10 @@ parameters = {"path data": "../Data/",
               "file data": "Doses_time",
               "file OMI": "Ozone_OMI",
               "file binary search": "binary_search",
+              "file clear sky": "clear_sky",
               "date initial": "2020-06-01",
               "date final": "2020-08-01",
+              "dataset": "1/4 MED"
               }
 OMI_data = read_data(parameters["path data"],
                      "{}_{}.csv".format(parameters["file data"],
@@ -17,13 +19,19 @@ OMI_data = read_data(parameters["path data"],
 binary_search_data = read_data(parameters["path data"],
                                "{}_{}.csv".format(parameters["file data"],
                                                   parameters["file binary search"]))
+clear_sky_data = read_data(parameters["path data"],
+                           "{}_{}.csv".format(parameters["file data"],
+                                              parameters["file clear sky"]))
 months, months_names = obtain_xticks(OMI_data.index)
-plt.plot(OMI_data.index, OMI_data["1/4 MED"],
-         label="Ozone OMI",
-         lw=1.5)
-plt.plot(binary_search_data.index, binary_search_data["1/4 MED"],
-         label="Binary search",
-         lw=1.5)
+plt.scatter(OMI_data.index, OMI_data[parameters["dataset"]],
+            label="Ozone OMI",
+            lw=1.5)
+plt.scatter(binary_search_data.index, binary_search_data[parameters["dataset"]],
+            label="Binary search",
+            lw=1.5)
+plt.scatter(clear_sky_data.index, clear_sky_data[parameters["dataset"]],
+            label="Clear sky",
+            lw=1.5)
 plt.xticks(months,
            months_names)
 plt.xlim(pd.to_datetime(parameters["date initial"]),

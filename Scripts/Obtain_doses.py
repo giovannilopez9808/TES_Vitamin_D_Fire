@@ -29,7 +29,7 @@ def select_files(parameters={}):
 parameters = {"path data": "../Results/TUV/",
               "path results": "../Data/",
               "file results": "Doses_time",
-              "which file": "Ozone_OMI",
+              "which file": "clear_sky",
               "Vitamin Doses": 136,
               "1/4 MED": 250/4,
               "1 MED": 250,
