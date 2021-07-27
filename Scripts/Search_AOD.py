@@ -72,4 +72,5 @@ for date in TUV_data_input.index:
                                data_date,
                                parameters["Attempt limit"],
                                write_file)
+os.system("rm {}*.txt".format(parameters["path TUV results"]))
 print("="*50)
