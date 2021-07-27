@@ -1,17 +1,5 @@
 from Class_list import *
-
-
-def read_TUV_input(parameters={}):
-    data = pd.read_csv("{}{}".format(parameters["path data"],
-                                     parameters["file data"]))
-    data = date_format(data)
-    return data
-
-
-def date_format(data=pd.DataFrame()):
-    data.index = pd.to_datetime(data["Date"])
-    data = data.drop("Date", 1)
-    return data
+from functions import *
 
 
 def obtain_data(data=pd.DataFrame(), parameters={}, date=pd.Timestamp(2000, 1, 1)):
@@ -47,7 +35,8 @@ parameters = {"path data": "../Data/",
               "AOD final": 4,
               "source data": "Davis",
               }
-TUV_data_input = read_TUV_input(parameters)
+TUV_data_input = read_data(parameters["path data"],
+                           parameters["file data"])
 data = Davis_data(parameters["path data"],
                   parameters["file Davis"],
                   parameters["day initial"],
@@ -56,8 +45,6 @@ hours = [hour for hour in range(parameters["hour initial"],
                                 parameters["hour final"])]
 write_file = Write_Results(parameters["path data"])
 for date in TUV_data_input.index:
-    print("\n{}\n".format("="*50))
-    print("Analizando fecha {}".format(date.date()))
     data_date = obtain_data(data,
                             parameters,
                             date)
