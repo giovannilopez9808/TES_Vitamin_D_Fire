@@ -64,35 +64,36 @@ dates = select_dates(AOD_data,
                      ozone_data,
                      parameters)
 for date in dates:
-    AOD_dataset = which_AOD(parameters,
-                            AOD_data,
-                            date)
-    ozone_dataset = which_Ozone(parameters,
-                                ozone_data,
+    if date >= pd.to_datetime("2019-12-02"):
+        AOD_dataset = which_AOD(parameters,
+                                AOD_data,
                                 date)
-    print_header_terminal(date)
-    file = open("{}{}_{}_{}.csv".format(parameters["path results"],
-                                        date.date(),
-                                        ozone_dataset["Filename"],
-                                        AOD_dataset["Filename"]),
-                "w")
-    file.write("Hour,SZA,UVI,Vitamin D\n")
-    print_TUV_parameters(ozone_dataset["Ozone"],
-                         AOD_dataset["AOD"])
-    for hour in range(parameters["hour initial"], parameters["hour final"]):
-        TUV = TUV_model(parameters["path results"],
-                        date,
-                        ozone_dataset["Ozone"],
-                        AOD_dataset["AOD"],
-                        hour,
-                        hour+1,
-                        parameters["max rows"])
-        TUV.run()
-        for TUV_hour, TUV_sza, TUV_uvi, TUV_vitamin in zip(TUV.hours, TUV.sza, TUV.uvi, TUV.vitamin):
-            file.write("{},{},{},{}\n".format(TUV_hour,
-                                              TUV_sza,
-                                              TUV_uvi,
-                                              TUV_vitamin))
-    file.close()
+        ozone_dataset = which_Ozone(parameters,
+                                    ozone_data,
+                                    date)
+        print_header_terminal(date)
+        file = open("{}{}_{}_{}.csv".format(parameters["path results"],
+                                            date.date(),
+                                            ozone_dataset["Filename"],
+                                            AOD_dataset["Filename"]),
+                    "w")
+        file.write("Hour,SZA,UVI,Vitamin D\n")
+        print_TUV_parameters(ozone_dataset["Ozone"],
+                             AOD_dataset["AOD"])
+        for hour in range(parameters["hour initial"], parameters["hour final"]):
+            TUV = TUV_model(parameters["path results"],
+                            date,
+                            ozone_dataset["Ozone"],
+                            AOD_dataset["AOD"],
+                            hour,
+                            hour+1,
+                            parameters["max rows"])
+            TUV.run()
+            for TUV_hour, TUV_sza, TUV_uvi, TUV_vitamin in zip(TUV.hours, TUV.sza, TUV.uvi, TUV.vitamin):
+                file.write("{},{},{},{}\n".format(TUV_hour,
+                                                  TUV_sza,
+                                                  TUV_uvi,
+                                                  TUV_vitamin))
+        file.close()
 os.system("rm {}*.txt".format(parameters["path results"]))
 print("\n")
