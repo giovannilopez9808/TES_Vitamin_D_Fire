@@ -23,7 +23,7 @@ def obtain_data_into_hours(data=pd.DataFrame(), hour_i=0, hour_f=24):
 
 
 parameters = {"path data": "../Data/",
-              "file data": "TUV_dates_input.csv",
+              "file data": "Search_AOD_input.csv",
               "file Davis": "data_Davis.csv",
               "path TUV results": "../Results/TUV/",
               "day initial": "2020-05-01",
