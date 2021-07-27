@@ -1,16 +1,17 @@
+from functions import *
 from os import listdir
 import numpy as np
 
 
 def obtain_doses(hour, data, lim):
     maximum = len(data)
-    var = False
+    var = True
     dosis = 0
     n = 0
-    while var == False and n < maximum:
+    while var and n < maximum:
         dosis += data[n]*60
         if dosis > lim:
-            var = True
+            var = False
         else:
             n += 1
     if n != maximum:
@@ -22,26 +23,32 @@ def obtain_doses(hour, data, lim):
 
 def select_files(parameters={}):
     files = sorted(listdir(parameters["path data"]))
-    files = [file for file in files if parameters["which file"] in file]
-    return files
+    AOD_dataset = select_dataset_parameters_AOD(parameters["dataset AOD"])
+    Ozone_dataset = select_dataset_parameters_Ozone(
+        parameters["dataset Ozone"])
+    ID = "_{}_{}".format(Ozone_dataset["Filename"],
+                         AOD_dataset["Filename"])
+    files = [file for file in files if ID in file]
+    return files, ID
 
 
 parameters = {"path data": "../Results/TUV/",
               "path results": "../Data/",
               "file results": "Doses_time",
-              "which file": "clear_sky",
+              "dataset AOD": "0.30",
+              "dataset Ozone": "260",
               "Vitamin Doses": 136,
               "1/4 MED": 250/4,
               "1 MED": 250,
               }
-files = select_files(parameters)
-file_result = open("{}{}_{}.csv".format(parameters["path results"],
-                                        parameters["file results"],
-                                        parameters["which file"]),
+files, ID = select_files(parameters)
+file_result = open("{}{}{}.csv".format(parameters["path results"],
+                                       parameters["file results"],
+                                       ID),
                    "w")
 file_result.write("Date,vitamin,1/4 MED,1 MED\n")
 for file in files:
-    date = file.replace("_{}.csv".format(parameters["which file"]), "")
+    date = file.replace("{}.csv".format(ID), "")
     hour, uv_list, vitamin_list = np.loadtxt("{}{}".format(parameters["path data"],
                                                            file),
                                              delimiter=",",
@@ -62,3 +69,5 @@ for file in files:
                                              time_med_14,
                                              time_med_1))
 file_result.close()
+print("✅ Se ha creado el archivo {}{}.csv".format(parameters["file results"],
+                                                  ID))
