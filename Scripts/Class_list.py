@@ -204,7 +204,18 @@ class Search_AOD:
         self.TUV_path = TUV_path
         self.data = data
         self.RD = RD
+        self.initialize_log()
         self.run()
+        self.log.close()
+
+    def initialize_log(self):
+        self.log = open("Search_AOD.log", "a")
+        header = "\n{}\n".format("="*50)
+        date_header = "Analizando fecha {}".format(self.date.date())
+        print(header)
+        print(date_header)
+        self.log.write(header)
+        self.log.write("{}\n".format(date_header))
 
     def run(self):
         """
@@ -305,21 +316,25 @@ class Search_AOD:
 
     def print_header_results(self):
         """
-        Escritura de los headers en la terminal
+        Escritura de los headers en la terminal y en el .log
         """
-        print("\t{}\t{}\t{}\t{}".format("RD",
-                                        "AOD",
-                                        "Data",
-                                        "TUV"))
+        text = "\t{}\t{}\t{}\t{}".format("RD",
+                                         "AOD",
+                                         "Data",
+                                         "TUV")
+        print(text)
+        self.log.write("{}\n".format(text))
 
     def print_date_results(self, RD=10, AOD=0.5, measurement=5, data=3):
         """
-        Escritura de los resultados en la terminal
+        Escritura de los resultados en la terminal y en el .log
         """
-        print("\t{:.2f}\t{:.3f}\t{:.2f}\t{:.2f}".format(RD,
-                                                        AOD,
-                                                        measurement,
-                                                        data))
+        text = "\t{:.2f}\t{:.3f}\t{:.2f}\t{:.2f}".format(RD,
+                                                         AOD,
+                                                         measurement,
+                                                         data)
+        print(text)
+        self.log.write("{}\n".format(text))
 
 
 class Write_Results:
