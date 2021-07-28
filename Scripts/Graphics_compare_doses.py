@@ -46,7 +46,6 @@ for i, dataset in enumerate(parameters["dataset parameters"]):
                 lw=1.5)
     if i == 0:
         months, months_names = obtain_xticks(data.index)
-        print(months_names)
         plt.xticks(months,
                    months_names)
 plt.xlim(pd.to_datetime(parameters["date initial"]),
