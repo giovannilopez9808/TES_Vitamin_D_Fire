@@ -23,9 +23,8 @@ def obtain_doses(hour, data, lim):
 
 def select_files(parameters={}):
     files = sorted(listdir(parameters["path data"]))
-    AOD_dataset = select_dataset_parameters_AOD(parameters["dataset AOD"])
-    Ozone_dataset = select_dataset_parameters_Ozone(
-        parameters["dataset Ozone"])
+    AOD_dataset = select_dataset_AOD(parameters["dataset AOD"])
+    Ozone_dataset = select_dataset_Ozone(parameters["dataset Ozone"])
     ID = "_{}_{}".format(Ozone_dataset["Filename"],
                          AOD_dataset["Filename"])
     files = [file for file in files if ID in file]

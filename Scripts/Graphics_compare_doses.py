@@ -4,8 +4,8 @@ import pandas as pd
 
 
 def obtain_id_and_title_parameters(id_Ozone="", id_AOD=""):
-    AOD_dataset = select_dataset_parameters_AOD(id_AOD)
-    Ozone_dataset = select_dataset_parameters_Ozone(id_Ozone)
+    AOD_dataset = select_dataset_AOD(id_AOD)
+    Ozone_dataset = select_dataset_Ozone(id_Ozone)
     # Define ID
     ID = "_{}_{}".format(Ozone_dataset["Filename"],
                          AOD_dataset["Filename"])

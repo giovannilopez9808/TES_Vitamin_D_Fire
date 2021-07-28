@@ -66,7 +66,7 @@ def format_data(data: pd.DataFrame()):
     return data
 
 
-def select_dataset_parameters_AOD(id_dataset=""):
+def select_dataset_AOD(id_dataset=""):
     dataset = {"0.30": {"Filename": "03",
                         "title": "AOD=0.30"},
                "Binary search": {"Filename": "binary_search",
@@ -75,7 +75,7 @@ def select_dataset_parameters_AOD(id_dataset=""):
     return dataset[id_dataset]
 
 
-def select_dataset_parameters_Ozone(id_dataset=""):
+def select_dataset_Ozone(id_dataset=""):
     dataset = {"260": {"Filename": "260",
                        "title": "260 DU"},
                "OMI": {"Filename": "OMI",
