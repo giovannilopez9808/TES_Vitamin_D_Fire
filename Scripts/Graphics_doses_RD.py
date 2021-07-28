@@ -27,13 +27,18 @@ def obtain_RD(data1=pd.DataFrame(), data2=pd.DataFrame(), parameters={}):
     data1 = array(data1[parameters["dataset doses"]])
     data2 = array(data2[parameters["dataset doses"]])
     RD = (data1-data2)*100/data2
-    RD = pd.DataFrame(RD, index=dates, columns=["RD"])
-    return RD
+    data = {"BS": data1,
+            "0.30": data2,
+            "RD": RD
+            }
+    data = pd.DataFrame(data, index=dates)
+    return data
 
 
 parameters = {"path data": "../Data/",
               "path graphics": "../Graphics/",
               "file data": "Doses_time",
+              "file results": "Doses_time_RD.csv",
               "date initial": "2020-06-01",
               "date final": "2020-10-01",
               "dataset doses": "1/4 MED",
@@ -51,12 +56,13 @@ dataset2 = obtain_data_for_dataset(dataset2,
                                    parameters)
 data1, data2 = select_same_period(dataset1,
                                   dataset2)
-RD = obtain_RD(data1,
-               data2,
-               parameters)
-print(RD)
-plt.scatter(RD.index, RD["RD"])
-months, months_names = obtain_xticks(RD.index)
+data = obtain_RD(data1,
+                 data2,
+                 parameters)
+data.to_csv("{}{}".format(parameters["path data"],
+                          parameters["file results"]))
+plt.scatter(data.index, data["RD"])
+months, months_names = obtain_xticks(data.index)
 plt.xticks(months,
            months_names)
 plt.xlim(pd.to_datetime(parameters["date initial"]),
