@@ -4,6 +4,9 @@ import pandas as pd
 
 
 def obtain_id_and_title_parameters(id_Ozone="", id_AOD=""):
+    """
+    Obtiene el ID y el titulo dependiendo de los parametros de ozono y AOD
+    """
     AOD_dataset = select_dataset_AOD(id_AOD)
     Ozone_dataset = select_dataset_Ozone(id_Ozone)
     # Define ID
