@@ -82,3 +82,17 @@ def select_dataset_Ozone(id_dataset=""):
                        "title": "OMI"},
                }
     return dataset[id_dataset]
+
+
+def obtain_id_and_title_parameters(id_Ozone="", id_AOD=""):
+    """
+    Obtiene el ID y el titulo dependiendo de los parametros de ozono y AOD
+    """
+    AOD_dataset = select_dataset_AOD(id_AOD)
+    Ozone_dataset = select_dataset_Ozone(id_Ozone)
+    # Define ID
+    ID = "_{}_{}".format(Ozone_dataset["Filename"],
+                         AOD_dataset["Filename"])
+    title = "{} {}".format(Ozone_dataset["title"],
+                           AOD_dataset["title"])
+    return ID, title
