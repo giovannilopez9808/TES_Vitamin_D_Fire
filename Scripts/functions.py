@@ -31,7 +31,8 @@ def obtain_xticks(dates):
     if month > 12:
         month = 1
         year += 1
-    date = obtain_first_date_for_month(months[-1])
+    date = pd.to_datetime("{}-{}-01".format(year,
+                                            str(month).zfill(2)))
     months.append(date)
     months_names = obtain_month_names(months)
     return months, months_names

@@ -34,7 +34,7 @@ parameters = {"path data": "../Data/",
               "day initial": "2020-05-11",
               "day final": "2020-09-30",
               "Ozone column": "Ozone",
-              "Use OMI Ozone": True,
+              "Use OMI Ozone": False,
               "Ozone value": 260,
               }
 data_input = read_dates_list(parameters["path data"],

@@ -4,10 +4,13 @@ import pandas as pd
 import os
 
 
-def print_header_terminal(date):
-    text = "Calculando dia {}".format(date.date())
-    print("="*len(text))
-    print(text)
+def print_header_terminal(date, aod, ozone):
+    date_text = "Calculando dia {}".format(date.date())
+    parameter_text = "\tAOD = {}\n\tOzone = {}".format(aod,
+                                                       ozone)
+    print("="*len(date_text))
+    print(date_text)
+    print(parameter_text)
 
 
 def select_dates(data_AOD=pd.DataFrame(), data_ozone=pd.DataFrame(), parameters={}):
@@ -39,19 +42,15 @@ def which_Ozone(parameters={}, data=pd.DataFrame(), date=pd.Timestamp(2000, 1, 1
     return dataset[parameters["which ozone"]]
 
 
-def print_TUV_parameters(ozone, aod):
-    print("\tAOD = {}\n\tOzone = {}".format(aod,
-                                            ozone))
-
-
 parameters = {
     "path data": "../Data/",
     "file AOD data": "Dates_AOD.csv",
     "file OMI data": "Ozone_data.csv",
     "path results": "../Results/TUV/",
-    "which AOD": "0.30",
-    "which ozone": "OMI",
-    "which date": "Ozone",
+    "which AOD": "Binary search",
+    "which ozone": "260",
+    # If binary search is selected, then use AOD from dates
+    "which date": "AOD",
     "hour initial": 11,
     "hour final": 19,
     "max rows": 60}
@@ -69,15 +68,15 @@ for date in dates:
     ozone_dataset = which_Ozone(parameters,
                                 ozone_data,
                                 date)
-    print_header_terminal(date)
+    print_header_terminal(date,
+                          AOD_dataset["AOD"],
+                          ozone_dataset["Ozone"])
     file = open("{}{}_{}_{}.csv".format(parameters["path results"],
                                         date.date(),
                                         ozone_dataset["Filename"],
                                         AOD_dataset["Filename"]),
                 "w")
     file.write("Hour,SZA,UVI,Vitamin D\n")
-    print_TUV_parameters(ozone_dataset["Ozone"],
-                         AOD_dataset["AOD"])
     for hour in range(parameters["hour initial"], parameters["hour final"]):
         TUV = TUV_model(parameters["path results"],
                         date,

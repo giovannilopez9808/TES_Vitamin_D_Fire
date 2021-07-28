@@ -18,7 +18,7 @@ parameters = {"path data": "../Data/",
               "path graphics": "../Graphics/",
               "file data": "Doses_time",
               "date initial": "2020-06-01",
-              "date final": "2020-08-01",
+              "date final": "2020-10-01",
               "dataset doses": "1/4 MED",
               # The first dataset is used for set the xticks
               "dataset parameters": {"dataset 1": {"dataset AOD": "Binary search",
@@ -43,6 +43,7 @@ for i, dataset in enumerate(parameters["dataset parameters"]):
                 lw=1.5)
     if i == 0:
         months, months_names = obtain_xticks(data.index)
+        print(months_names)
         plt.xticks(months,
                    months_names)
 plt.xlim(pd.to_datetime(parameters["date initial"]),
@@ -50,7 +51,7 @@ plt.xlim(pd.to_datetime(parameters["date initial"]),
 plt.xlabel("Periodo 2019-2020",
            fontsize=12)
 plt.ylim(0, 40)
-plt.yticks([tick for tick in range(0, 50, 10)])
+plt.yticks([tick for tick in range(0, 45, 5)])
 plt.ylabel("TES (minutos)",
            fontsize=12)
 plt.grid(ls="--",
