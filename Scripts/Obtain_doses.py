@@ -18,7 +18,7 @@ def obtain_doses(hour=[], data=[], lim=250):
         else:
             n += 1
     if n != maximum:
-        time = int((hour[n]-hour[0])*60)+1
+        time = (hour[n]-hour[0])*60+1
     else:
         time = ""
     return time
