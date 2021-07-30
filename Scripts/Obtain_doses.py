@@ -44,17 +44,17 @@ def select_files(parameters={}):
 parameters = {"path data": "../Results/TUV/",
               "path results": "../Data/",
               "file results": "Doses_time",
-              "dataset AOD": "Binary search",
+              "dataset AOD": "0.30",
               "dataset Ozone": "260",
               "Vitamin Doses": 136,
               "1/4 MED": 250/4,
               "1 MED": 250}
 files, ID = select_files(parameters)
-file = open("{}{}{}.csv".format(parameters["path results"],
-                                parameters["file results"],
-                                ID),
-            "w")
-file.write("Date,vitamin,1/4 MED,1 MED\n")
+file_result = open("{}{}{}.csv".format(parameters["path results"],
+                                       parameters["file results"],
+                                       ID),
+                   "w")
+file_result.write("Date,vitamin,1/4 MED,1 MED\n")
 for file in files:
     date = file.replace("{}.csv".format(ID), "")
     hour, uv_list, vitamin_list = np.loadtxt("{}{}".format(parameters["path data"],
@@ -72,10 +72,10 @@ for file in files:
     time_med_1 = obtain_doses(hour,
                               uv_list/40,
                               parameters["1 MED"])
-    file.write("{},{},{},{}\n".format(date,
-                                      time_vitamin,
-                                      time_med_14,
-                                      time_med_1))
-file.close()
+    file_result.write("{},{},{},{}\n".format(date,
+                                             time_vitamin,
+                                             time_med_14,
+                                             time_med_1))
+file_result.close()
 print("✅ Se ha creado el archivo {}{}.csv".format(parameters["file results"],
                                                   ID))
