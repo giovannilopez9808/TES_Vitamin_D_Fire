@@ -77,9 +77,9 @@ def select_dataset_AOD(id_dataset=""):
 
 def select_dataset_Ozone(id_dataset=""):
     dataset = {"260": {"Filename": "260",
-                       "title": "260 DU"},
+                       "title": "Ozone=260 DU"},
                "OMI": {"Filename": "OMI",
-                       "title": "OMI"},
+                       "title": "Ozone=OMI"},
                }
     return dataset[id_dataset]
 
