@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
+from numpy import array
 from functions import *
 import pandas as pd
-from numpy import array
 
 
 def obtain_data_for_dataset(dataset="", parameters={}):
