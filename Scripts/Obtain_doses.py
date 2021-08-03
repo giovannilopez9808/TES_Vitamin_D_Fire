@@ -24,32 +24,16 @@ def obtain_doses(hour=[], data=[], lim=250):
     return time
 
 
-def select_files(parameters={}):
-    """
-    Obtiene la lista de archivos dependiendo de los parametros de AOD y ozono seleccionados
-    """
-    files = sorted(listdir(parameters["path data"]))
-    # AOD dataset
-    AOD_dataset = select_dataset_AOD(parameters["dataset AOD"])
-    # Ozone dataset
-    Ozone_dataset = select_dataset_Ozone(parameters["dataset Ozone"])
-    # ID de los datosas
-    ID = "_{}_{}".format(Ozone_dataset["Filename"],
-                         AOD_dataset["Filename"])
-    # Filtrado de los archivos
-    files = [file for file in files if ID in file]
-    return files, ID
-
-
 parameters = {"path data": "../Results/TUV/",
               "path results": "../Data/",
               "file results": "Doses_time",
-              "dataset AOD": "0.30",
-              "dataset Ozone": "260",
+              "dataset": {"AOD": "0.30",
+                          "Ozone": "260"},
               "Vitamin Doses": 136,
               "1/4 MED": 250/4,
               "1 MED": 250}
-files, ID = select_files(parameters)
+files, ID = obtain_files_for_dataset_and_ID(parameters,
+                         parameters["dataset"])
 file_result = open("{}{}{}.csv".format(parameters["path results"],
                                        parameters["file results"],
                                        ID),
