@@ -7,17 +7,21 @@ parameters = {"path data": "../Data/",
               "path graphics": "../Graphics/",
               "file data": "Doses_time",
               "date initial": "2020-06-01",
-              "date final": "2020-10-01",
+              "date final": "2020-09-01",
               "dataset doses": "1/4 MED",
               # The first dataset is used for set the xticks
               "dataset parameters": {"dataset 1": {"AOD": "Binary search",
-                                                   "Ozone": "OMI"},
+                                                   "Ozone": "OMI",
+                                                   "Color": "grey",
+                                                   "Title": "Aire con prescencia de humo"},
                                      #  "dataset 2": {"AOD": "Binary search",
                                      #                "Ozone": "260"},
                                      #  "dataset 3": {"AOD": "0.30",
                                      #                "Ozone": "260"},
                                      "dataset 4": {"AOD": "0.30",
-                                                   "Ozone": "OMI"},
+                                                   "Ozone": "OMI",
+                                                   "Color": "#e85d04",
+                                                   "Title": "Aire en condiciones típicas", },
                                      },
               }
 for i, dataset in enumerate(parameters["dataset parameters"]):
@@ -28,15 +32,16 @@ for i, dataset in enumerate(parameters["dataset parameters"]):
                      "{}{}.csv".format(parameters["file data"],
                                        ID))
     plt.scatter(data.index, data[parameters["dataset doses"]],
-                label=title,
-                lw=1.5)
+                label=dataset["Title"],
+                c=dataset["Color"],
+                s=15,)
     if i == 0:
         months, months_names = obtain_xticks(data.index)
         plt.xticks(months,
                    months_names)
 plt.xlim(pd.to_datetime(parameters["date initial"]),
          pd.to_datetime(parameters["date final"]))
-plt.xlabel("Periodo 2019-2020",
+plt.xlabel("año 2020",
            fontsize=12)
 plt.ylim(0, 40)
 plt.yticks([tick for tick in range(0, 45, 5)])
