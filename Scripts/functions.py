@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 
 
 def select_data_from_date_period(data, day_initial, day_final):
@@ -96,3 +97,20 @@ def obtain_id_and_title_parameters(id_Ozone="", id_AOD=""):
     title = "{} {}".format(Ozone_dataset["title"],
                            AOD_dataset["title"])
     return ID, title
+
+
+def obtain_files_for_dataset_and_ID(parameters={}, dataset={}):
+    """
+    Obtiene la lista de archivos dependiendo de los parametros de AOD y ozono seleccionados
+    """
+    files = sorted(os.listdir(parameters["path data"]))
+    # AOD dataset
+    AOD_dataset = select_dataset_AOD(dataset["AOD"])
+    # Ozone dataset
+    Ozone_dataset = select_dataset_Ozone(dataset["Ozone"])
+    # ID de los datosas
+    ID = "_{}_{}".format(Ozone_dataset["Filename"],
+                         AOD_dataset["Filename"])
+    # Filtrado de los archivos
+    files = [file for file in files if ID in file]
+    return files, ID
