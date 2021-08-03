@@ -75,7 +75,7 @@ parameters = {
     "path data": "../Data/",
     "file Davis": "data_Davis.csv",
     "file OMI": "data_OMI_OMT03",
-    "day initial": "2020-07-31",
+    "day initial": "2020-08-01",
     "day final": "2020-06-28",
     "Cloud factor column": "Cld. F."
 }
