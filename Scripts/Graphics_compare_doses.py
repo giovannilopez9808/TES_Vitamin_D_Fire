@@ -10,20 +10,20 @@ parameters = {"path data": "../Data/",
               "date final": "2020-10-01",
               "dataset doses": "1/4 MED",
               # The first dataset is used for set the xticks
-              "dataset parameters": {"dataset 1": {"dataset AOD": "Binary search",
-                                                   "dataset Ozone": "OMI"},
-                                     #  "dataset 2": {"dataset AOD": "Binary search",
-                                     #                "dataset Ozone": "260"},
-                                     #  "dataset 3": {"dataset AOD": "0.30",
-                                     #                "dataset Ozone": "260"},
-                                     "dataset 4": {"dataset AOD": "0.30",
-                                                   "dataset Ozone": "OMI"},
+              "dataset parameters": {"dataset 1": {"AOD": "Binary search",
+                                                   "Ozone": "OMI"},
+                                     #  "dataset 2": {"AOD": "Binary search",
+                                     #                "Ozone": "260"},
+                                     #  "dataset 3": {"AOD": "0.30",
+                                     #                "Ozone": "260"},
+                                     "dataset 4": {"AOD": "0.30",
+                                                   "Ozone": "OMI"},
                                      },
               }
 for i, dataset in enumerate(parameters["dataset parameters"]):
     dataset = parameters["dataset parameters"][dataset]
-    ID, title = obtain_id_and_title_parameters(dataset["dataset Ozone"],
-                                               dataset["dataset AOD"])
+    ID, title = obtain_id_and_title_parameters(dataset["Ozone"],
+                                               dataset["AOD"])
     data = read_data(parameters["path data"],
                      "{}{}.csv".format(parameters["file data"],
                                        ID))

@@ -43,10 +43,10 @@ parameters = {"path data": "../Data/",
               "date final": "2020-10-01",
               "dataset doses": "1/4 MED",
               # The first dataset is used for set the xticks
-              "dataset parameters": {"dataset 1": {"dataset AOD": "Binary search",
-                                                   "dataset Ozone": "OMI"},
-                                     "dataset 2": {"dataset AOD": "0.30",
-                                                   "dataset Ozone": "OMI"},
+              "dataset parameters": {"dataset 1": {"AOD": "Binary search",
+                                                   "Ozone": "OMI"},
+                                     "dataset 2": {"AOD": "0.30",
+                                                   "Ozone": "OMI"},
                                      },
               }
 dataset1, dataset2 = parameters["dataset parameters"]
