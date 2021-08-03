@@ -13,7 +13,7 @@ parameters = {"path data": "../Data/",
               "dataset parameters": {"dataset 1": {"AOD": "Binary search",
                                                    "Ozone": "OMI",
                                                    "Color": "grey",
-                                                   "Title": "Aire con prescencia de humo"},
+                                                   "Title": "Aire con presencia de humo"},
                                      #  "dataset 2": {"AOD": "Binary search",
                                      #                "Ozone": "260"},
                                      #  "dataset 3": {"AOD": "0.30",
@@ -43,8 +43,8 @@ plt.xlim(pd.to_datetime(parameters["date initial"]),
          pd.to_datetime(parameters["date final"]))
 plt.xlabel("año 2020",
            fontsize=12)
-plt.ylim(0, 40)
-plt.yticks([tick for tick in range(0, 45, 5)])
+plt.ylim(0, 35)
+plt.yticks([tick for tick in range(0, 40, 5)])
 plt.ylabel("TES (minutos)",
            fontsize=12)
 plt.grid(ls="--",
@@ -57,7 +57,8 @@ plt.subplots_adjust(top=0.956,
                     hspace=0.248,
                     wspace=0.2)
 plt.legend(frameon=False,
-           fontsize=11)
+           fontsize=11,
+           loc="lower left")
 # plt.savefig("{}{}".format(parameters["path graphics"],
 #                           parameters["graphics name"]),
 #             dpi=400)
