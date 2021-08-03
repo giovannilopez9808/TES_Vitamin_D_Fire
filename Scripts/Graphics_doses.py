@@ -3,19 +3,31 @@ from functions import *
 import pandas as pd
 
 
+def obtain_filename_data(parameters={}, ID=""):
+    filename = "{}{}.csv".format(parameters["file data"],
+                                 ID)
+    return filename
+
+
 parameters = {"path data": "../Data/",
               "path graphics": "../Graphics/",
-              "file data": "Doses_time.csv",
+              "file data": "Doses_time",
               "graphics name": "dosis_vitamin.png",
               "date initial": "2020-06-01",
-              "date final": "2020-08-01",
+              "date final": "2020-10-01",
               "Vitamin color": "#f9c74f",
               "Vitamin label": "Dosis pre-vitamina D 136 J/m$^2$",
               "1/4 MED color": "#f48c06",
               "1/4 MED label": "Dosis eritémica mínima 62.5 J/m$^2$",
               "1 MED color": "#dc2f02",
               "1 MED label": "Dosis eritémica mínima 250 J/m$^2$",
+              "dataset": {"AOD": "0.30",
+                          "Ozone": "OMI"},
               }
+ID, title = obtain_id_and_title_parameters(parameters["dataset"]["Ozone"],
+                                           parameters["dataset"]["AOD"])
+parameters["file data"] = obtain_filename_data(parameters,
+                                               ID)
 data = read_data(parameters["path data"],
                  parameters["file data"])
 months, months_names = obtain_xticks(data.index)
@@ -49,10 +61,11 @@ plt.ylim(0, 100)
 plt.yticks([tick for tick in range(0, 110, 10)])
 plt.ylabel("TES (minutos)",
            fontsize=12)
+plt.title(title)
 plt.grid(ls="--",
          color="grey",
          alpha=0.5)
-plt.subplots_adjust(top=0.956,
+plt.subplots_adjust(top=0.917,
                     bottom=0.132,
                     left=0.106,
                     right=0.958,
