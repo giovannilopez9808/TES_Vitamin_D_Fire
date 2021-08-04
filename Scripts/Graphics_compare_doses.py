@@ -3,16 +3,43 @@ from functions import *
 import pandas as pd
 
 
-def plot_middle_line_of_month(months=[]):
+def plot_grid(months=[], parameters={}):
+    plot_xgrid(months)
+    plot_ygrid(parameters)
+
+
+def plot_xgrid(months=[]):
     for month in months:
+        grid([month, month],
+             [0, 36])
         year = month.year
         month = str(month.month).zfill(2)
         date = pd.to_datetime("{}-{}-15".format(year,
                                                 month))
-        plt.plot([date, date], [0, 36],
-                 ls="--",
-                 color="grey",
-                 alpha=0.5)
+        grid([date, date],
+             [0, 36])
+
+
+def plot_ygrid(parameters={}):
+    ylabels = []
+    dates = [pd.to_datetime(parameters["date initial"]),
+             pd.to_datetime(parameters["date final"])]
+    yticks = range(parameters["y limit"]+1)
+    for ytick in range(parameters["y limit"]+1):
+        if ytick % parameters["y delta"] == 0:
+            grid(dates,
+                 [ytick, ytick])
+        else:
+            ytick = ""
+        ylabels.append(ytick)
+    plt.yticks(yticks, ylabels)
+
+
+def grid(x, y):
+    plt.plot(x, y,
+             ls="--",
+             color="grey",
+             alpha=0.5)
 
 
 parameters = {"path data": "../Data/",
@@ -22,6 +49,7 @@ parameters = {"path data": "../Data/",
               "date final": "2020-09-01",
               "dataset doses": "1/4 MED",
               "y limit": 35,
+              "y delta": 5,
               # The first dataset is used for set the xticks
               "dataset parameters": {"dataset 1": {"AOD": "Binary search",
                                                    "Ozone": "OMI",
@@ -30,7 +58,9 @@ parameters = {"path data": "../Data/",
                                      #  "dataset 2": {"AOD": "Binary search",
                                      #                "Ozone": "260"},
                                      #  "dataset 3": {"AOD": "0.30",
-                                     #                "Ozone": "260"},
+                                     #                "Ozone": "260",
+                                     #                "Color": "blue",
+                                     #                "Title": "Clean"},
                                      "dataset 4": {"AOD": "0.30",
                                                    "Ozone": "OMI",
                                                    "Color": "#e85d04",
@@ -52,18 +82,15 @@ for i, dataset in enumerate(parameters["dataset parameters"]):
         months, months_names = obtain_xticks(data.index)
         plt.xticks(months,
                    months_names)
-        plot_middle_line_of_month(months)
+        plot_grid(months,
+                  parameters)
 plt.xlim(pd.to_datetime(parameters["date initial"]),
          pd.to_datetime(parameters["date final"]))
 plt.xlabel("año 2020",
            fontsize=12)
-plt.ylim(0, 32)
-plt.yticks([tick for tick in range(0, 34, 2)])
+plt.ylim(0, parameters["y limit"])
 plt.ylabel("TES (minutos)",
            fontsize=12)
-plt.grid(ls="--",
-         color="grey",
-         alpha=0.5)
 plt.subplots_adjust(top=0.956,
                     bottom=0.132,
                     left=0.106,
