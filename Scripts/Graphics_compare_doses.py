@@ -104,4 +104,3 @@ plt.legend(frameon=False,
 plt.savefig("{}{}".format(parameters["path graphics"],
                           parameters["graphics name"]),
             dpi=400)
-plt.show()
