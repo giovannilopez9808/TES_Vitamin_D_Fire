@@ -1,10 +1,11 @@
+import matplotlib.pyplot as plt
 import pandas as pd
 import os
 
 
 def select_data_from_date_period(data, day_initial, day_final):
-    data = data[data.index.date >= day_initial]
-    data = data[data.index.date <= day_final]
+    data = data[data.index >= day_initial]
+    data = data[data.index <= day_final]
     return data
 
 
@@ -114,3 +115,38 @@ def obtain_files_for_dataset_and_ID(parameters={}, dataset={}):
     # Filtrado de los archivos
     files = [file for file in files if ID in file]
     return files, ID
+
+
+def plot_xgrid(months=[], ylimit=50):
+    for month in months:
+        grid([month, month],
+             [0, ylimit])
+        year = month.year
+        month = str(month.month).zfill(2)
+        date = pd.to_datetime("{}-{}-15".format(year,
+                                                month))
+        grid([date, date],
+             [0, ylimit])
+
+
+def plot_ygrid(parameters={}):
+    ylabels = []
+    dates = [pd.to_datetime(parameters["date initial"]),
+             pd.to_datetime(parameters["date final"])]
+    yticks = range(parameters["y limit"]+1)
+    for ytick in range(parameters["y limit"]+1):
+        if ytick % parameters["y delta"] == 0:
+            grid(dates,
+                 [ytick, ytick])
+        else:
+            ytick = ""
+        ylabels.append(ytick)
+    plt.yticks(yticks, ylabels,
+               fontsize=parameters["fontsize"])
+
+
+def grid(x, y):
+    plt.plot(x, y,
+             ls="--",
+             color="grey",
+             alpha=0.5)
