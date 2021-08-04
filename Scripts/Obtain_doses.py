@@ -28,12 +28,12 @@ parameters = {"path data": "../Results/TUV/",
               "path results": "../Data/",
               "file results": "Doses_time",
               "dataset": {"AOD": "0.30",
-                          "Ozone": "260"},
+                          "Ozone": "OMI"},
               "Vitamin Doses": 136,
               "1/4 MED": 250/4,
               "1 MED": 250}
 files, ID = obtain_files_for_dataset_and_ID(parameters,
-                         parameters["dataset"])
+                                            parameters["dataset"])
 file_result = open("{}{}{}.csv".format(parameters["path results"],
                                        parameters["file results"],
                                        ID),
