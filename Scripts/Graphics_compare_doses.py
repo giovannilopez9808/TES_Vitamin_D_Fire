@@ -45,6 +45,7 @@ def grid(x, y):
 parameters = {"path data": "../Data/",
               "path graphics": "../Graphics/",
               "file data": "Doses_time",
+              "graphics name": "Dose_compare.png",
               "date initial": "2020-06-01",
               "date final": "2020-09-01",
               "dataset doses": "1/4 MED",
@@ -100,7 +101,7 @@ plt.subplots_adjust(top=0.956,
 plt.legend(frameon=False,
            fontsize=11,
            loc="lower left")
-# plt.savefig("{}{}".format(parameters["path graphics"],
-#                           parameters["graphics name"]),
-#             dpi=400)
+plt.savefig("{}{}".format(parameters["path graphics"],
+                          parameters["graphics name"]),
+            dpi=400)
 plt.show()
