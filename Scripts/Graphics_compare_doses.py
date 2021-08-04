@@ -53,7 +53,7 @@ parameters = {"path data": "../Data/",
               # The first dataset is used for set the xticks
               "dataset parameters": {"dataset 1": {"AOD": "Binary search",
                                                    "Ozone": "OMI",
-                                                   "Color": "grey",
+                                                   "Color": "#000000",
                                                    "Title": "Aire con presencia de humo"},
                                      #  "dataset 2": {"AOD": "Binary search",
                                      #                "Ozone": "260"},
