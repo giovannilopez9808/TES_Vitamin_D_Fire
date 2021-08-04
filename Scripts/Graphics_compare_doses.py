@@ -32,7 +32,8 @@ def plot_ygrid(parameters={}):
         else:
             ytick = ""
         ylabels.append(ytick)
-    plt.yticks(yticks, ylabels)
+    plt.yticks(yticks, ylabels,
+               fontsize=parameters["fontsize"])
 
 
 def grid(x, y):
@@ -51,6 +52,7 @@ parameters = {"path data": "../Data/",
               "dataset doses": "1/4 MED",
               "y limit": 35,
               "y delta": 5,
+              "fontsize": 12,
               # The first dataset is used for set the xticks
               "dataset parameters": {"dataset 1": {"AOD": "Binary search",
                                                    "Ozone": "OMI",
@@ -68,6 +70,7 @@ parameters = {"path data": "../Data/",
                                                    "Title": "Aire en condiciones típicas", },
                                      },
               }
+plt.subplots(figsize=(10, 6))
 for i, dataset in enumerate(parameters["dataset parameters"]):
     dataset = parameters["dataset parameters"][dataset]
     ID, title = obtain_id_and_title_parameters(dataset["Ozone"],
@@ -82,16 +85,17 @@ for i, dataset in enumerate(parameters["dataset parameters"]):
     if i == 0:
         months, months_names = obtain_xticks(data.index)
         plt.xticks(months,
-                   months_names)
+                   months_names,
+                   fontsize=parameters["fontsize"])
         plot_grid(months,
                   parameters)
 plt.xlim(pd.to_datetime(parameters["date initial"]),
          pd.to_datetime(parameters["date final"]))
 plt.xlabel("año 2020",
-           fontsize=12)
+           fontsize=parameters["fontsize"])
 plt.ylim(0, parameters["y limit"])
 plt.ylabel("TES (minutos)",
-           fontsize=12)
+           fontsize=parameters["fontsize"])
 plt.subplots_adjust(top=0.956,
                     bottom=0.132,
                     left=0.106,
@@ -99,8 +103,9 @@ plt.subplots_adjust(top=0.956,
                     hspace=0.248,
                     wspace=0.2)
 plt.legend(frameon=False,
-           fontsize=11,
+           fontsize=parameters["fontsize"]+2,
            loc="lower left")
+plt.tight_layout()
 plt.savefig("{}{}".format(parameters["path graphics"],
                           parameters["graphics name"]),
             dpi=400)
