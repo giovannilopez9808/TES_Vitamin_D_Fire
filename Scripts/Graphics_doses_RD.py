@@ -6,8 +6,8 @@ import pandas as pd
 
 def obtain_data_for_dataset(dataset="", parameters={}):
     dataset = parameters["dataset parameters"][dataset]
-    ID, title = obtain_id_and_title_parameters(dataset["dataset Ozone"],
-                                               dataset["dataset AOD"])
+    ID, title = obtain_id_and_title_parameters(dataset["Ozone"],
+                                               dataset["AOD"])
     data = read_data(parameters["path data"],
                      "{}{}.csv".format(parameters["file data"],
                                        ID))
@@ -39,9 +39,13 @@ parameters = {"path data": "../Data/",
               "path graphics": "../Graphics/",
               "file data": "Doses_time",
               "file results": "Doses_time_RD.csv",
+              "graphics name": "RD_doses.png",
               "date initial": "2020-06-01",
-              "date final": "2020-10-01",
+              "date final": "2020-09-01",
               "dataset doses": "1/4 MED",
+              "y limit": 70,
+              "delta y": 10,
+              "fontsize": 13,
               # The first dataset is used for set the xticks
               "dataset parameters": {"dataset 1": {"AOD": "Binary search",
                                                    "Ozone": "OMI"},
@@ -54,35 +58,62 @@ dataset1 = obtain_data_for_dataset(dataset1,
                                    parameters)
 dataset2 = obtain_data_for_dataset(dataset2,
                                    parameters)
+dataset1 = select_data_from_date_period(dataset1,
+                                        parameters["date initial"],
+                                        parameters["date final"])
+dataset2 = select_data_from_date_period(dataset2,
+                                        parameters["date initial"],
+                                        parameters["date final"])
 data1, data2 = select_same_period(dataset1,
                                   dataset2)
 data = obtain_RD(data1,
                  data2,
                  parameters)
+mean = data.mean()
+dates = [pd.to_datetime(parameters["date initial"]),
+         pd.to_datetime(parameters["date final"])]
 data.to_csv("{}{}".format(parameters["path data"],
                           parameters["file results"]))
-plt.scatter(data.index, data["RD"])
+plt.subplots(figsize=(10, 6))
+plt.plot(dates, [mean["RD"], mean["RD"]],
+         color="#d90429",
+         label="Promedio",
+         lw=2)
+plt.scatter(data.index, data["RD"],
+            label="DR (%)",
+            s=30)
 months, months_names = obtain_xticks(data.index)
 plt.xticks(months,
-           months_names)
-plt.xlim(pd.to_datetime(parameters["date initial"]),
-         pd.to_datetime(parameters["date final"]))
-plt.xlabel("Periodo 2020",
-           fontsize=12)
-plt.ylim(-10, 90)
-plt.yticks([tick for tick in range(-10, 100, 10)])
-plt.ylabel("RD",
-           fontsize=12)
+           months_names,
+           fontsize=parameters["fontsize"])
+plot_xgrid(months,
+           parameters["y limit"])
+plt.xlim(dates[0],
+         dates[1])
+plt.xlabel("año 2020",
+           fontsize=parameters["fontsize"])
+plt.ylim(0,
+         parameters["y limit"])
+plt.yticks([tick for tick in range(0,
+                                   parameters["y limit"]+parameters["delta y"],
+                                   parameters["delta y"])],
+           fontsize=parameters["fontsize"])
+plt.ylabel("Diferencia Relativa (%)",
+           fontsize=parameters["fontsize"])
 plt.grid(ls="--",
          color="grey",
-         alpha=0.5)
+         alpha=0.5,
+         axis="y")
+plt.legend(frameon=False,
+           ncol=2,
+           loc="upper left",
+           fontsize=parameters["fontsize"]+1)
 plt.subplots_adjust(top=0.956,
                     bottom=0.132,
                     left=0.106,
                     right=0.958,
                     hspace=0.248,
                     wspace=0.2)
-# plt.savefig("{}{}".format(parameters["path graphics"],
-#                           parameters["graphics name"]),
-#             dpi=400)
-plt.show()
+plt.savefig("{}{}".format(parameters["path graphics"],
+                          parameters["graphics name"]),
+            dpi=400)
