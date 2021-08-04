@@ -3,12 +3,25 @@ from functions import *
 import pandas as pd
 
 
+def plot_middle_line_of_month(months=[]):
+    for month in months:
+        year = month.year
+        month = str(month.month).zfill(2)
+        date = pd.to_datetime("{}-{}-15".format(year,
+                                                month))
+        plt.plot([date, date], [0, 36],
+                 ls="--",
+                 color="grey",
+                 alpha=0.5)
+
+
 parameters = {"path data": "../Data/",
               "path graphics": "../Graphics/",
               "file data": "Doses_time",
               "date initial": "2020-06-01",
               "date final": "2020-09-01",
               "dataset doses": "1/4 MED",
+              "y limit": 35,
               # The first dataset is used for set the xticks
               "dataset parameters": {"dataset 1": {"AOD": "Binary search",
                                                    "Ozone": "OMI",
@@ -39,12 +52,13 @@ for i, dataset in enumerate(parameters["dataset parameters"]):
         months, months_names = obtain_xticks(data.index)
         plt.xticks(months,
                    months_names)
+        plot_middle_line_of_month(months)
 plt.xlim(pd.to_datetime(parameters["date initial"]),
          pd.to_datetime(parameters["date final"]))
 plt.xlabel("año 2020",
            fontsize=12)
-plt.ylim(0, 35)
-plt.yticks([tick for tick in range(0, 40, 5)])
+plt.ylim(0, 32)
+plt.yticks([tick for tick in range(0, 34, 2)])
 plt.ylabel("TES (minutos)",
            fontsize=12)
 plt.grid(ls="--",
