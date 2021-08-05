@@ -43,8 +43,8 @@ parameters = {"path data": "../Data/",
               "date initial": "2020-06-01",
               "date final": "2020-09-01",
               "dataset doses": "1/4 MED",
-              "y limit": 70,
-              "delta y": 10,
+              "y limit": 60,
+              "y delta": 10,
               "fontsize": 13,
               # The first dataset is used for set the xticks
               "dataset parameters": {"dataset 1": {"AOD": "Binary search",
@@ -88,22 +88,23 @@ plt.xticks(months,
            fontsize=parameters["fontsize"])
 plot_xgrid(months,
            parameters["y limit"])
+plot_ygrid(parameters)
 plt.xlim(dates[0],
          dates[1])
 plt.xlabel("año 2020",
            fontsize=parameters["fontsize"])
 plt.ylim(0,
          parameters["y limit"])
-plt.yticks([tick for tick in range(0,
-                                   parameters["y limit"]+parameters["delta y"],
-                                   parameters["delta y"])],
-           fontsize=parameters["fontsize"])
+# plt.yticks([tick for tick in range(0,
+#                                    parameters["y limit"]+parameters["y delta"],
+#                                    parameters["y delta"])],
+#            fontsize=parameters["fontsize"])
 plt.ylabel("Diferencia Relativa (%)",
            fontsize=parameters["fontsize"])
-plt.grid(ls="--",
-         color="grey",
-         alpha=0.5,
-         axis="y")
+# plt.grid(ls="--",
+#          color="grey",
+#          alpha=0.5,
+#          axis="y")
 plt.legend(frameon=False,
            ncol=2,
            loc="upper left",
