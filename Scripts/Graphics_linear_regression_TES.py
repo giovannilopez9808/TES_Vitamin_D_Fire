@@ -39,19 +39,18 @@ def obtain_line(parameters={}, fit=[]):
     for x in parameters["x limit"]:
         point = fit[0]*x+fit[1]
         line.append(point)
-    equation = equation_from_fit(fit)
-    return line, equation
+    return line
 
 
-def equation_from_fit(fit=[]):
+def print_equation_from_fit(fit=[]):
     if fit[1] > 0:
         sign = "+"
     else:
         sign = "-"
     equation = "y={:.4f}x{}{:.4f}".format(fit[0],
                                           sign,
-                                          int(fit[1]))
-    return equation
+                                          abs(fit[1]))
+    print("La ecuación de la regresión lineal es\n{}".format(equation))
 
 
 def obtain_ticks(limits: list, delta: float):
@@ -64,7 +63,7 @@ def obtain_ticks(limits: list, delta: float):
 parameters = {"path data": "../Data/",
               "path graphics": "../Graphics/",
               "file data": "Doses_time",
-              "graphics name": "RD_doses.png",
+              "graphics name": "linear_regression_TES.png",
               "date initial": "2020-06-01",
               "date final": "2020-09-01",
               "dataset doses": "1/4 MED",
@@ -97,15 +96,18 @@ data1, data2 = select_same_period(dataset1,
 data, fit = obtain_linear_regression(data1,
                                      data2,
                                      parameters)
-line, equation = obtain_line(parameters,
-                             fit)
+line = obtain_line(parameters,
+                   fit)
+print_equation_from_fit(fit)
 plt.subplots(figsize=(10, 6))
 plt.scatter(data["Smoke"], data["Clear sky"],
-            c="#d90429",
+            c="#b5179e",
             label="TES",
             s=20)
 plt.plot(parameters["x limit"], line,
-         label="Regresión lineal\n{}".format(equation))
+         label="Regresión lineal",
+         color="#3a0ca3",
+         lw=2)
 plt.xlim(parameters["x limit"][0],
          parameters["x limit"][1])
 plt.xlabel("TES con presencia de humo (min)",
@@ -121,6 +123,9 @@ plt.yticks(obtain_ticks(parameters["y limit"],
 plt.legend(frameon=False,
            loc="upper left",
            fontsize=parameters["fontsize"]+1)
+plt.grid(ls="--",
+         color="#000000",
+         alpha=0.5)
 plt.subplots_adjust(top=0.956,
                     bottom=0.132,
                     left=0.106,
@@ -128,7 +133,6 @@ plt.subplots_adjust(top=0.956,
                     hspace=0.248,
                     wspace=0.2)
 plt.tight_layout()
-# plt.savefig("{}{}".format(parameters["path graphics"],
-#                           parameters["graphics name"]),
-#             dpi=400)
-plt.show()
+plt.savefig("{}{}".format(parameters["path graphics"],
+                          parameters["graphics name"]),
+            dpi=400)
