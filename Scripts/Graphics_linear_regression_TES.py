@@ -1,5 +1,6 @@
+from scipy.optimize import curve_fit
+from numpy import array,  append
 import matplotlib.pyplot as plt
-from numpy import array, polyfit
 from functions import *
 import pandas as pd
 
@@ -26,12 +27,19 @@ def obtain_linear_regression(data1=pd.DataFrame(), data2=pd.DataFrame(), paramet
     dates = data1.index
     data1 = array(data1[parameters["dataset doses"]])
     data2 = array(data2[parameters["dataset doses"]])
-    fit = polyfit(data1, data2, 1)
+    fit = curve_fit(linear_function, data1,
+                    data2,
+                    1)
+    fit = array([fit[0][0], fit[1][0][0]])
     data = {"Smoke": data1,
             "Clear sky": data2,
             }
     data = pd.DataFrame(data, index=dates)
     return data, fit
+
+
+def linear_function(x, m):
+    return m*x
 
 
 def obtain_line(parameters={}, fit=[]):
@@ -43,13 +51,7 @@ def obtain_line(parameters={}, fit=[]):
 
 
 def print_equation_from_fit(fit=[]):
-    if fit[1] > 0:
-        sign = "+"
-    else:
-        sign = "-"
-    equation = "y={:.4f}x{}{:.4f}".format(fit[0],
-                                          sign,
-                                          abs(fit[1]))
+    equation = "y={:.4f}x".format(fit[0])
     print("La ecuación de la regresión lineal es\n{}".format(equation))
 
 
