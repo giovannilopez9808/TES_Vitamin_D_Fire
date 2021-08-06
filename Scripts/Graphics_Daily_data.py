@@ -20,11 +20,12 @@ def select_only_in_the_period(data, date_i, date_f):
     return data
 
 
-def plot_daily_data(data, date, cloud_factor):
+def plot_daily_data(data_davis, data_tuv, date):
     """
     Funcion que plotea los datos diarios junto con el cloud factor
     """
-    plt.plot(data)
+    plt.plot(data_davis)
+    plt.plot(data_tuv)
     ticks, hour_tick = obtain_tick(date)
     plt.xlabel("Time Local (h)")
     plt.ylabel("UV Index")
@@ -36,8 +37,7 @@ def plot_daily_data(data, date, cloud_factor):
     plt.grid(ls="--",
              color="#000000",
              alpha=0.5)
-    plt.title("Date {}\n Cloud factor {:.3f}".format(date,
-                                                     cloud_factor))
+    plt.title("Fecha {}".format(date))
     plt.subplots_adjust(top=0.879,
                         bottom=0.121,
                         left=0.097,
