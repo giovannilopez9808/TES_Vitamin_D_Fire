@@ -72,6 +72,7 @@ data = obtain_RD(data1,
 mean = data.mean()
 dates = [pd.to_datetime(parameters["date initial"]),
          pd.to_datetime(parameters["date final"])]
+data["RD"] = data["RD"].round(2)
 data.to_csv("{}{}".format(parameters["path data"],
                           parameters["file results"]))
 plt.subplots(figsize=(10, 6))
