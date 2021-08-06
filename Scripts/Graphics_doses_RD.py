@@ -27,8 +27,8 @@ def obtain_RD(data1=pd.DataFrame(), data2=pd.DataFrame(), parameters={}):
     data1 = array(data1[parameters["dataset doses"]])
     data2 = array(data2[parameters["dataset doses"]])
     RD = (data1-data2)*100/data2
-    data = {"BS": data1,
-            "0.30": data2,
+    data = {"Smoke": data1,
+            "Clear sky": data2,
             "RD": RD
             }
     data = pd.DataFrame(data, index=dates)
