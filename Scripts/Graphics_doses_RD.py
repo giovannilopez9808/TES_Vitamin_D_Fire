@@ -95,16 +95,8 @@ plt.xlabel("año 2020",
            fontsize=parameters["fontsize"])
 plt.ylim(0,
          parameters["y limit"])
-# plt.yticks([tick for tick in range(0,
-#                                    parameters["y limit"]+parameters["y delta"],
-#                                    parameters["y delta"])],
-#            fontsize=parameters["fontsize"])
 plt.ylabel("Diferencia Relativa (%)",
            fontsize=parameters["fontsize"])
-# plt.grid(ls="--",
-#          color="grey",
-#          alpha=0.5,
-#          axis="y")
 plt.legend(frameon=False,
            ncol=2,
            loc="upper left",
