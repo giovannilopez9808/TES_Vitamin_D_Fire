@@ -69,10 +69,10 @@ parameters = {"path data": "../Data/",
               "date initial": "2020-06-01",
               "date final": "2020-09-01",
               "dataset doses": "1/4 MED",
-              "x limit": [16, 32],
-              "x delta": 2,
-              "y limit": [10, 30],
+              "y limit": [16, 32],
               "y delta": 2,
+              "x limit": [10, 30],
+              "x delta": 2,
               "fontsize": 13,
               # The first dataset is used for set the xticks
               "dataset parameters": {"dataset 1": {"AOD": "Binary search",
@@ -95,8 +95,8 @@ dataset2 = select_data_from_date_period(dataset2,
 data1, data2 = select_same_period(dataset1,
                                   dataset2)
 
-data, fit = obtain_linear_regression(data1,
-                                     data2,
+data, fit = obtain_linear_regression(data2,
+                                     data1,
                                      parameters)
 line = obtain_line(parameters,
                    fit)
@@ -112,13 +112,13 @@ plt.plot(parameters["x limit"], line,
          lw=2)
 plt.xlim(parameters["x limit"][0],
          parameters["x limit"][1])
-plt.xlabel("TES con presencia de humo (min)",
+plt.xlabel("TES en condiciones típicas (min)",
            fontsize=parameters["fontsize"])
 plt.xticks(obtain_ticks(parameters["x limit"],
                         parameters["x delta"]))
 plt.ylim(parameters["y limit"][0],
          parameters["y limit"][1])
-plt.ylabel("TES en condiciones típicas (min)",
+plt.ylabel("TES con presencia de humo (min)",
            fontsize=parameters["fontsize"])
 plt.yticks(obtain_ticks(parameters["y limit"],
                         parameters["y delta"]))
