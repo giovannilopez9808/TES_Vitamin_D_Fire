@@ -73,8 +73,3 @@ for file in files:
 file_result.close()
 print("✅ Se ha creado el archivo {}{}.csv".format(parameters["file results"],
                                                   ID))
-hours_initial = np.array(hours_initial)
-print("El calculo de los TES se realizo entre las {} y las {}".format(np.min(hours_initial),
-                                                                      np.max(
-                                                                          hours_initial)
-                                                                      ))

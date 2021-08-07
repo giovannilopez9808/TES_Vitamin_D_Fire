@@ -16,7 +16,7 @@ def obtain_data_per_day(data: pd.DataFrame, date: pd.Timestamp):
     return data
 
 
-def obtain_data_into_hours(data: pd.DataFrame, hour_i=0, hour_f=24):
+def obtain_data_into_hours(data: pd.DataFrame, hour_i: int, hour_f: int):
     data = data[data.index.hour >= hour_i]
     data = data[data.index.hour < hour_f]
     return data

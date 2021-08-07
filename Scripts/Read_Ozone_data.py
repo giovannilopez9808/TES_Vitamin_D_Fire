@@ -2,7 +2,7 @@ from Class_list import OMI_data
 import pandas as pd
 
 
-def format_data(data: pd.DataFrame()):
+def format_data(data: pd.DataFrame):
     data = select_only_ozone_data(data)
     data = clean_data(data)
     data = obtain_daily_mean(data)
@@ -10,23 +10,23 @@ def format_data(data: pd.DataFrame()):
     return data
 
 
-def clean_data(data: pd.DataFrame()):
+def clean_data(data: pd.DataFrame):
     data = data[data["Ozone"] <= 400]
     data = data[data["Ozone"] >= 200]
     return data
 
 
-def select_only_ozone_data(data: pd.DataFrame()):
+def select_only_ozone_data(data: pd.DataFrame):
     columns = data.columns
     columns = columns.drop("Ozone")
     return data.drop(columns, 1)
 
 
-def obtain_daily_mean(data: pd.DataFrame()):
+def obtain_daily_mean(data: pd.DataFrame):
     return data.resample("D").mean()
 
 
-def obtain_mean(numero1, numero2):
+def obtain_mean(numero1: float, numero2: float):
     return (numero1+numero2)/2
 
 
