@@ -2,38 +2,22 @@ import matplotlib.pyplot as plt
 from Class_list import *
 
 
-def obtain_daily_mean(data):
-    """
-    Funcion que obtiene el promedio diario
-    """
-    daily_mean = data.resample("D").mean()
-    return daily_mean
-
-
-def read_dates_select(path, name):
-    return pd.read_csv("{}{}".format(path, name))
-
-
-def select_only_in_the_period(data, date_i, date_f):
-    data = data[data["Date"] >= date_i]
-    data = data[data["Date"] <= date_f]
-    return data
-
-
 def plot_daily_data(data_davis, data_tuv, date):
     """
     Funcion que plotea los datos diarios junto con el cloud factor
     """
-    plt.plot(data_davis)
-    plt.plot(data_tuv)
+    plt.plot(data_davis.index, data_davis["UV"],
+             label="Davis")
+    plt.plot(data_tuv.index, data_tuv["UVI"],
+             label="TUV")
     ticks, hour_tick = obtain_tick(date)
     plt.xlabel("Time Local (h)")
     plt.ylabel("UV Index")
     plt.xticks(hour_tick, ticks)
-    plt.xlim(pd.to_datetime("{} 07:00".format(date)),
-             pd.to_datetime("{} 19:00".format(date)))
-    plt.ylim(0, 14)
-    plt.yticks(np.arange(0, 15))
+    plt.xlim(pd.to_datetime("{} 11:00".format(date)),
+             pd.to_datetime("{} 15:00".format(date)))
+    plt.ylim(0, 7)
+    plt.yticks(np.arange(0, 8))
     plt.grid(ls="--",
              color="#000000",
              alpha=0.5)
@@ -44,6 +28,9 @@ def plot_daily_data(data_davis, data_tuv, date):
                         right=0.963,
                         hspace=0.2,
                         wspace=0.2)
+    plt.legend(frameon=False,
+               ncol=2)
+    plt.tight_layout()
     plt.show()
 
 
@@ -71,34 +58,27 @@ def obtain_tick(date):
 
 
 parameters = {
-    "Dates clear sky": "dates_select.dat",
     "path data": "../Data/",
+    "path TUV": "../Results/TUV/",
     "file Davis": "data_Davis.csv",
-    "file OMI": "data_OMI_OMT03",
-    "day initial": "2020-08-01",
-    "day final": "2020-06-28",
-    "Cloud factor column": "Cld. F."
+    "date initial": "2020-05-12",
+    "date final": "2020-08-28",
+    "dataset": {"AOD": "Binary search",
+                "Ozone": "260"}
 }
-parameters["day final"] = parameters["day initial"]
 Davis = Davis_data(parameters["path data"],
                    parameters["file Davis"],
-                   parameters["day initial"],
-                   parameters["day final"])
-OMI = OMI_data(parameters["path data"],
-               parameters["file OMI"],
-               parameters["day initial"],
-               parameters["day final"])
-# Obtiene el promedio diario de Cloud Factor
-Cf_data = obtain_daily_mean(OMI.data[parameters["Cloud factor column"]])
-# Valor diario del cloud factor
-try:
-    Cf_value = Cf_data[parameters["day initial"]]
-except:
-    Cf_value = -1
-# Lista de los datos diarios UVI para una fecha
-daily_data = Davis.data[Davis.data.index.date ==
-                        pd.to_datetime(parameters["day initial"])]
+                   parameters["date initial"],
+                   parameters["date final"])
+Davis_daily_data = Davis.data[Davis.data.index.date ==
+                              pd.to_datetime(parameters["date initial"])]
+ID, _ = obtain_id_and_title_parameters(parameters["dataset"]["Ozone"],
+                                       parameters["dataset"]["AOD"])
+TUV_file = "{}{}.csv".format(parameters["date initial"],
+                             ID)
+TUV = TUV_results(parameters["path TUV"],
+                  TUV_file)
 # Ploteo de los datos diarios
-plot_daily_data(daily_data,
-                parameters["day initial"],
-                Cf_value)
+plot_daily_data(Davis_daily_data,
+                TUV.data,
+                parameters["date initial"])
