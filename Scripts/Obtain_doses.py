@@ -3,14 +3,18 @@ from os import listdir
 import numpy as np
 
 
-def obtain_doses(hour=[], data=[], lim=250):
+def obtain_solar_noon_hour(uv_data: list):
+    return np.where(uv_list == np.max(uv_list))[0][0]
+
+
+def obtain_doses(hour: list, data: list, lim: float, n: int):
     """
     Obtiene el tiempo de exposición solar en base a la dosis y los valores de irradiancia
     """
     maximum = len(data)
     var = True
     dosis = 0
-    n = 0
+    hour_initial = hour[n]
     while var and n < maximum:
         dosis += data[n]*60
         if dosis > lim:
@@ -18,7 +22,7 @@ def obtain_doses(hour=[], data=[], lim=250):
         else:
             n += 1
     if n != maximum:
-        time = (hour[n]-hour[0])*60+1
+        time = (hour[n]-hour_initial)*60+1
     else:
         time = ""
     return time
@@ -28,7 +32,7 @@ parameters = {"path data": "../Results/TUV/",
               "path results": "../Data/",
               "file results": "Doses_time",
               "dataset": {"AOD": "0.30",
-                          "Ozone": "OMI"},
+                          "Ozone": "260"},
               "Vitamin Doses": 136,
               "1/4 MED": 250/4,
               "1 MED": 250}
@@ -47,19 +51,23 @@ for file in files:
                                              skiprows=1,
                                              usecols=[0, 2, 3],
                                              unpack=True)
+    hour_initial = obtain_solar_noon_hour(uv_list)
     time_vitamin = obtain_doses(hour,
                                 vitamin_list,
-                                parameters["Vitamin Doses"])
+                                parameters["Vitamin Doses"],
+                                hour_initial)
     time_med_14 = obtain_doses(hour,
                                uv_list/40,
-                               parameters["1/4 MED"])
+                               parameters["1/4 MED"],
+                               hour_initial)
     time_med_1 = obtain_doses(hour,
                               uv_list/40,
-                              parameters["1 MED"])
-    file_result.write("{},{},{},{}\n".format(date,
-                                             time_vitamin,
-                                             time_med_14,
-                                             time_med_1))
+                              parameters["1 MED"],
+                              hour_initial)
+    file_result.write("{},{:.0f},{:.0f},{:.0f}\n".format(date,
+                                                         time_vitamin,
+                                                         time_med_14,
+                                                         time_med_1))
 file_result.close()
 print("✅ Se ha creado el archivo {}{}.csv".format(parameters["file results"],
                                                   ID))
