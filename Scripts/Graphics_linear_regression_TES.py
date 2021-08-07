@@ -69,9 +69,9 @@ parameters = {"path data": "../Data/",
               "date initial": "2020-06-01",
               "date final": "2020-09-01",
               "dataset doses": "1/4 MED",
-              "y limit": [16, 32],
+              "y limit": [10, 22],
               "y delta": 2,
-              "x limit": [10, 30],
+              "x limit": [6, 20],
               "x delta": 2,
               "fontsize": 13,
               # The first dataset is used for set the xticks
@@ -112,7 +112,7 @@ plt.plot(parameters["x limit"], line,
          lw=2)
 plt.xlim(parameters["x limit"][0],
          parameters["x limit"][1])
-plt.xlabel("TES en condiciones típicas (min)",
+plt.xlabel("TES en condiciones normales (min)",
            fontsize=parameters["fontsize"])
 plt.xticks(obtain_ticks(parameters["x limit"],
                         parameters["x delta"]))

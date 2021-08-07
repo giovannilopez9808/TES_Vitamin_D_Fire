@@ -35,6 +35,15 @@ def obtain_RD(data1=pd.DataFrame(), data2=pd.DataFrame(), parameters={}):
     return data
 
 
+def mean_and_std_from_TES(data: pd.DataFrame()):
+    data = data.drop("RD", 1)
+    data = data.describe()
+    index = data.index
+    index = index.drop(["mean", "std"])
+    data = data.drop(index)
+    print(data)
+
+
 parameters = {"path data": "../Data/",
               "path graphics": "../Graphics/",
               "file data": "Doses_time",
@@ -43,7 +52,7 @@ parameters = {"path data": "../Data/",
               "date initial": "2020-06-01",
               "date final": "2020-09-01",
               "dataset doses": "1/4 MED",
-              "y limit": 60,
+              "y limit": 70,
               "y delta": 10,
               "fontsize": 13,
               # The first dataset is used for set the xticks
@@ -70,11 +79,13 @@ data = obtain_RD(data1,
                  data2,
                  parameters)
 mean = data.mean()
+print(mean)
 dates = [pd.to_datetime(parameters["date initial"]),
          pd.to_datetime(parameters["date final"])]
 data["RD"] = data["RD"].round(2)
 data.to_csv("{}{}".format(parameters["path data"],
                           parameters["file results"]))
+mean_and_std_from_TES(data)
 plt.subplots(figsize=(10, 6))
 plt.plot(dates, [mean["RD"], mean["RD"]],
          color="#d90429",

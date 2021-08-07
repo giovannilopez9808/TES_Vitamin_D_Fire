@@ -61,7 +61,7 @@ parameters = {
     "path data": "../Data/",
     "path TUV": "../Results/TUV/",
     "file Davis": "data_Davis.csv",
-    "date initial": "2020-05-12",
+    "date initial": "2020-08-15",
     "date final": "2020-08-28",
     "dataset": {"AOD": "Binary search",
                 "Ozone": "260"}

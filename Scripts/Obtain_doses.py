@@ -31,7 +31,7 @@ def obtain_doses(hour: list, data: list, lim: float, n: int):
 parameters = {"path data": "../Results/TUV/",
               "path results": "../Data/",
               "file results": "Doses_time",
-              "dataset": {"AOD": "0.30",
+              "dataset": {"AOD": "Binary search",
                           "Ozone": "260"},
               "Vitamin Doses": 136,
               "1/4 MED": 250/4,
@@ -43,6 +43,7 @@ file_result = open("{}{}{}.csv".format(parameters["path results"],
                                        ID),
                    "w")
 file_result.write("Date,vitamin,1/4 MED,1 MED\n")
+hours_initial = []
 for file in files:
     date = file.replace("{}.csv".format(ID), "")
     hour, uv_list, vitamin_list = np.loadtxt("{}{}".format(parameters["path data"],
@@ -52,6 +53,7 @@ for file in files:
                                              usecols=[0, 2, 3],
                                              unpack=True)
     hour_initial = obtain_solar_noon_hour(uv_list)
+    hours_initial.append(hour[hour_initial])
     time_vitamin = obtain_doses(hour,
                                 vitamin_list,
                                 parameters["Vitamin Doses"],
@@ -71,3 +73,8 @@ for file in files:
 file_result.close()
 print("✅ Se ha creado el archivo {}{}.csv".format(parameters["file results"],
                                                   ID))
+hours_initial = np.array(hours_initial)
+print("El calculo de los TES se realizo entre las {} y las {}".format(np.min(hours_initial),
+                                                                      np.max(
+                                                                          hours_initial)
+                                                                      ))
