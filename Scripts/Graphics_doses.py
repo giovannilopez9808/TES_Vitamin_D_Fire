@@ -3,7 +3,7 @@ from functions import *
 import pandas as pd
 
 
-def obtain_filename_data(parameters={}, ID=""):
+def obtain_filename_data(parameters: dict, ID: str):
     filename = "{}{}.csv".format(parameters["file data"],
                                  ID)
     return filename

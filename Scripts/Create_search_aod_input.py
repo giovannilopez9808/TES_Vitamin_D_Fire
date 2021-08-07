@@ -1,7 +1,7 @@
 from Class_list import *
 
 
-def read_dates_list(path, file):
+def read_dates_list(path: str, file: str):
     dates = pd.read_csv("{}{}".format(path,
                                       file))
     dates.index = pd.to_datetime(dates["Date"])
@@ -9,18 +9,18 @@ def read_dates_list(path, file):
     return dates
 
 
-def obtain_ozone_data(OMI, column):
+def obtain_ozone_data(OMI: pd.DataFrame, column: str):
     Ozone_data = OMI.data[column]
     Ozone_data = obtain_daily_mean(Ozone_data)
     return Ozone_data
 
 
-def obtain_daily_mean(data):
+def obtain_daily_mean(data: pd.DataFrame):
     data = data.resample("D").mean()
     return data
 
 
-def obtain_data_from_dates(data, dates):
+def obtain_data_from_dates(data: pd.DataFrame, dates: list):
     data = data[dates]
     data = data.dropna()
     return data

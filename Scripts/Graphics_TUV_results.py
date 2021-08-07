@@ -13,7 +13,9 @@ files, ID = obtain_files_for_dataset_and_ID(parameters,
 for file in files:
     TUV = TUV_results(parameters["path data"],
                       file)
-    if TUV.date >= parameters["date initial"] and TUV.date <= parameters["date final"]:
+    before_date = TUV.date >= parameters["date initial"]
+    after_date = TUV.date <= parameters["date final"]
+    if before_date and after_date:
         plt.plot(TUV.data.index, TUV.data["UVI"])
 plt.xlim(pd.to_datetime(parameters["date initial"]),
          pd.to_datetime(parameters["date final"]))

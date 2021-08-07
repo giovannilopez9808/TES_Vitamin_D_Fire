@@ -3,8 +3,8 @@ from os import listdir
 import numpy as np
 
 
-def obtain_solar_noon_hour(uv_data: list):
-    return np.where(uv_list == np.max(uv_list))[0][0]
+def obtain_solar_noon_hour(data: list):
+    return np.where(data == np.max(data))[0][0]
 
 
 def obtain_doses(hour: list, data: list, lim: float, n: int):

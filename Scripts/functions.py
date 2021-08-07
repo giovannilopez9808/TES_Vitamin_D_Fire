@@ -3,13 +3,19 @@ import pandas as pd
 import os
 
 
-def select_data_from_date_period(data, day_initial, day_final):
+def select_data_from_date_period(data: pd.DataFrame, day_initial: str, day_final: str):
+    """
+    Selecciona los datos que se encuentren en un periodo de tiempo
+    """
     data = data[data.index >= day_initial]
     data = data[data.index <= day_final]
     return data
 
 
-def date_to_yymmdd(date):
+def date_to_yymmdd(date: pd.Timestamp):
+    """
+    Convierte una fecha con formato yyyy-mm-dd a yymmdd
+    """
     year = str(date.year)[2:4]
     month = str(date.month).zfill(2)
     day = str(date.day).zfill(2)
@@ -17,12 +23,18 @@ def date_to_yymmdd(date):
     return date, year, month, day
 
 
-def calculate_RD(measurement, model):
+def calculate_RD(measurement: float, model: float):
+    """
+    Calcula la diferencia relativa entre dos cantidades
+    """
     RD = (model-measurement)*100/measurement
     return RD
 
 
-def obtain_xticks(dates):
+def obtain_xticks(dates: list):
+    """
+    Crea una lista con el primer día del mes a partir de una lista que contiene los dias de los datos
+    """
     months = [obtain_first_date_for_month(dates[0])]
     for date in dates:
         if months[-1].month != date.month:
@@ -40,7 +52,10 @@ def obtain_xticks(dates):
     return months, months_names
 
 
-def obtain_first_date_for_month(date):
+def obtain_first_date_for_month(date: pd.Timestamp):
+    """
+    Obtiene el primer dia del mes a partir de una fecha dada
+    """
     year = date.year
     month = date.month
     date = pd.to_datetime("{}-{}-01".format(year,
@@ -48,27 +63,39 @@ def obtain_first_date_for_month(date):
     return date
 
 
-def obtain_month_names(dates):
+def obtain_month_names(dates: list):
+    """
+    Obtiene los nombres de los meses contenidos en una lista de fechas
+    """
     months_names = []
     for date in dates:
         months_names.append(date.strftime("%b"))
     return months_names
 
 
-def read_data(path="", file=""):
+def read_data(path: str, file: str):
+    """
+    Lectura de datos donde la columna de las fechas lleva de nombre Date
+    """
     data = pd.read_csv("{}{}".format(path,
                                      file))
     data = format_data(data)
     return data
 
 
-def format_data(data: pd.DataFrame()):
+def format_data(data: pd.DataFrame):
+    """
+    Formato de la columna de Date en formato `pd.Timestamp`
+    """
     data.index = pd.to_datetime(data["Date"])
     data = data.drop("Date", 1)
     return data
 
 
-def select_dataset_AOD(id_dataset=""):
+def select_dataset_AOD(id_dataset: str):
+    """
+    Selecciona los parametros de nombre del archivo y titulo de los datos de AOD
+    """
     dataset = {"0.30": {"Filename": "03",
                         "title": "AOD=0.30"},
                "Binary search": {"Filename": "binary_search",
@@ -77,7 +104,10 @@ def select_dataset_AOD(id_dataset=""):
     return dataset[id_dataset]
 
 
-def select_dataset_Ozone(id_dataset=""):
+def select_dataset_Ozone(id_dataset: str):
+    """
+    Selecciona los parametros de nombre del archivo y titulo de los datos de Ozono
+    """
     dataset = {"260": {"Filename": "260",
                        "title": "Ozone=260 DU"},
                "OMI": {"Filename": "OMI",
@@ -86,7 +116,7 @@ def select_dataset_Ozone(id_dataset=""):
     return dataset[id_dataset]
 
 
-def obtain_id_and_title_parameters(id_Ozone="", id_AOD=""):
+def obtain_id_and_title_parameters(id_Ozone: str, id_AOD: str):
     """
     Obtiene el ID y el titulo dependiendo de los parametros de ozono y AOD
     """
@@ -100,7 +130,7 @@ def obtain_id_and_title_parameters(id_Ozone="", id_AOD=""):
     return ID, title
 
 
-def obtain_files_for_dataset_and_ID(parameters={}, dataset={}):
+def obtain_files_for_dataset_and_ID(parameters: dict, dataset: dict):
     """
     Obtiene la lista de archivos dependiendo de los parametros de AOD y ozono seleccionados
     """
@@ -117,7 +147,10 @@ def obtain_files_for_dataset_and_ID(parameters={}, dataset={}):
     return files, ID
 
 
-def plot_xgrid(months=[], ylimit=50):
+def plot_xgrid(months: list, ylimit: float):
+    """
+    Grafica el xgrid a a partir de una lista de primeros dias del mes y cuanto debe de dejar entre pestañas. Añade una linea cada día 15 de mes
+    """
     for month in months:
         grid([month, month],
              [0, ylimit])
@@ -129,7 +162,10 @@ def plot_xgrid(months=[], ylimit=50):
              [0, ylimit])
 
 
-def plot_ygrid(parameters={}):
+def plot_ygrid(parameters: dict):
+    """
+    Grafica el ygrid a partir de parametros que definen la extension del grafico
+    """
     ylabels = []
     dates = [pd.to_datetime(parameters["date initial"]),
              pd.to_datetime(parameters["date final"])]
@@ -145,7 +181,10 @@ def plot_ygrid(parameters={}):
                fontsize=parameters["fontsize"])
 
 
-def grid(x, y):
+def grid(x: list, y: list):
+    """
+    Ploteo de cada linea del grid
+    """
     plt.plot(x, y,
              ls="--",
              color="grey",

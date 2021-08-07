@@ -2,7 +2,7 @@ from Class_list import *
 from functions import *
 
 
-def obtain_data(data=pd.DataFrame(), parameters={}, date=pd.Timestamp(2000, 1, 1)):
+def obtain_data(data: pd.DataFrame, parameters: dict, date: pd.Timestamp):
     data = obtain_data_per_day(data.data["UV"],
                                date)
     data = obtain_data_into_hours(data,
@@ -11,12 +11,12 @@ def obtain_data(data=pd.DataFrame(), parameters={}, date=pd.Timestamp(2000, 1, 1
     return data
 
 
-def obtain_data_per_day(data=pd.DataFrame(), date=pd.Timestamp(2000, 1, 1)):
+def obtain_data_per_day(data: pd.DataFrame, date: pd.Timestamp):
     data = data[data.index.date == date]
     return data
 
 
-def obtain_data_into_hours(data=pd.DataFrame(), hour_i=0, hour_f=24):
+def obtain_data_into_hours(data: pd.DataFrame, hour_i=0, hour_f=24):
     data = data[data.index.hour >= hour_i]
     data = data[data.index.hour < hour_f]
     return data

@@ -4,7 +4,7 @@ from functions import *
 import pandas as pd
 
 
-def obtain_data_for_dataset(dataset="", parameters={}):
+def obtain_data_for_dataset(dataset: str, parameters: dict):
     dataset = parameters["dataset parameters"][dataset]
     ID, title = obtain_id_and_title_parameters(dataset["Ozone"],
                                                dataset["AOD"])
@@ -14,7 +14,7 @@ def obtain_data_for_dataset(dataset="", parameters={}):
     return data
 
 
-def select_same_period(data1=pd.DataFrame(), data2=pd.DataFrame()):
+def select_same_period(data1: pd.DataFrame, data2: pd.DataFrame):
     dates_data1 = data1.index
     dates_data2 = data2.index
     dates_data2 = dates_data2.drop(dates_data1)
@@ -22,7 +22,7 @@ def select_same_period(data1=pd.DataFrame(), data2=pd.DataFrame()):
     return data1, data2
 
 
-def obtain_RD(data1=pd.DataFrame(), data2=pd.DataFrame(), parameters={}):
+def obtain_RD(data1: pd.DataFrame, data2: pd.DataFrame, parameters: dict):
     dates = data1.index
     data1 = array(data1[parameters["dataset doses"]])
     data2 = array(data2[parameters["dataset doses"]])
@@ -35,7 +35,7 @@ def obtain_RD(data1=pd.DataFrame(), data2=pd.DataFrame(), parameters={}):
     return data
 
 
-def mean_and_std_from_TES(data: pd.DataFrame()):
+def mean_and_std_from_TES(data: pd.DataFrame):
     data = data.drop("RD", 1)
     data = data.describe()
     index = data.index

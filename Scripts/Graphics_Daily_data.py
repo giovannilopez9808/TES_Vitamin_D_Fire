@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from Class_list import *
 
 
-def plot_daily_data(data_davis, data_tuv, date):
+def plot_daily_data(data_davis: pd.DataFrame, data_tuv: pd.DataFrame, date: str):
     """
     Funcion que plotea los datos diarios junto con el cloud factor
     """
@@ -34,7 +34,7 @@ def plot_daily_data(data_davis, data_tuv, date):
     plt.show()
 
 
-def obtain_tick(date):
+def obtain_tick(date: str):
     """
     Obtener las etiquetas en el eje x de acuerdo a la hora
     """

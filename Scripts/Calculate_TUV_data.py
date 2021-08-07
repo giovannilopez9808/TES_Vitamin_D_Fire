@@ -4,7 +4,7 @@ import pandas as pd
 import os
 
 
-def print_header_terminal(date, aod, ozone):
+def print_header_terminal(date: pd.Timestamp, aod: float, ozone: float):
     date_text = "Calculando dia {}".format(date.date())
     parameter_text = "\tAOD = {}\n\tOzone = {}".format(aod,
                                                        ozone)
@@ -13,14 +13,14 @@ def print_header_terminal(date, aod, ozone):
     print(parameter_text)
 
 
-def select_dates(data_AOD=pd.DataFrame(), data_ozone=pd.DataFrame(), parameters={}):
+def select_dates(data_AOD: pd.DataFrame, data_ozone: pd.DataFrame, parameters: dict):
     if parameters["which date"] == "Ozone":
         return data_ozone.index
     if parameters["which date"] == "AOD":
         return data_AOD.index
 
 
-def which_AOD(parameters={}, data=pd.DataFrame(), date=pd.Timestamp(2000, 1, 1)):
+def which_AOD(parameters: dict, data: pd.DataFrame, date: pd.Timestamp):
     try:
         value = data["AOD"][date]
     except:
@@ -33,7 +33,7 @@ def which_AOD(parameters={}, data=pd.DataFrame(), date=pd.Timestamp(2000, 1, 1))
     return dataset[parameters["which AOD"]]
 
 
-def which_Ozone(parameters={}, data=pd.DataFrame(), date=pd.Timestamp(2000, 1, 1)):
+def which_Ozone(parameters: dict, data: pd.DataFrame, date: pd.Timestamp):
     dataset = {"260": {"Filename": "260",
                        "Ozone": 260},
                "OMI": {"Filename": "OMI",

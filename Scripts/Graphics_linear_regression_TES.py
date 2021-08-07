@@ -5,7 +5,7 @@ from functions import *
 import pandas as pd
 
 
-def obtain_data_for_dataset(dataset="", parameters={}):
+def obtain_data_for_dataset(dataset: str, parameters: dict):
     dataset = parameters["dataset parameters"][dataset]
     ID, title = obtain_id_and_title_parameters(dataset["Ozone"],
                                                dataset["AOD"])
@@ -15,7 +15,7 @@ def obtain_data_for_dataset(dataset="", parameters={}):
     return data
 
 
-def select_same_period(data1=pd.DataFrame(), data2=pd.DataFrame()):
+def select_same_period(data1: pd.DataFrame, data2: pd.DataFrame):
     dates_data1 = data1.index
     dates_data2 = data2.index
     dates_data2 = dates_data2.drop(dates_data1)
@@ -23,7 +23,7 @@ def select_same_period(data1=pd.DataFrame(), data2=pd.DataFrame()):
     return data1, data2
 
 
-def obtain_linear_regression(data1=pd.DataFrame(), data2=pd.DataFrame(), parameters={}):
+def obtain_linear_regression(data1: pd.DataFrame, data2: pd.DataFrame, parameters: dict):
     dates = data1.index
     data1 = array(data1[parameters["dataset doses"]])
     data2 = array(data2[parameters["dataset doses"]])
@@ -42,7 +42,7 @@ def linear_function(x, m):
     return m*x
 
 
-def obtain_line(parameters={}, fit=[]):
+def obtain_line(parameters: dict, fit: list):
     line = []
     for x in parameters["x limit"]:
         point = fit[0]*x+fit[1]
@@ -50,7 +50,7 @@ def obtain_line(parameters={}, fit=[]):
     return line
 
 
-def print_equation_from_fit(fit=[]):
+def print_equation_from_fit(fit: list):
     equation = "y={:.4f}x".format(fit[0])
     print("La ecuación de la regresión lineal es\n{}".format(equation))
 
