@@ -370,3 +370,35 @@ class Write_Results:
                                                                        AOD,
                                                                        RD))
         self.file_results.close()
+
+
+class TUV_results:
+    def __init__(self, path: str, file: str):
+        self.path = path
+        self.file = file
+        self.read_data()
+
+    def read_data(self):
+        self.data = pd.read_csv("{}{}".format(self.path,
+                                              self.file))
+        date = self.obtain_date_from_filename()
+        self.format_data(date)
+
+    def obtain_date_from_filename(self):
+        date = self.file.split("_")[0]
+        return date
+
+    def format_data(self, date: str):
+        self.format_hour()
+        self.data.index = pd.to_datetime(date+" "+self.data["Hour"])
+        self.data = self.data.drop("Hour", 1)
+
+    def format_hour(self):
+        self.data["Minute"] = (self.data["Hour"]-self.data["Hour"]//1)*60
+        self.data["Minute"] = self.data["Minute"].round()
+        self.data["Minute"] = self.data["Minute"].astype(int)
+        self.data["Minute"] = self.data["Minute"].astype(str).str.zfill(2)
+        self.data["Hour"] = self.data["Hour"].astype(int)
+        self.data["Hour"] = self.data["Hour"].astype(str).str.zfill(2)
+        self.data["Hour"] = self.data["Hour"]+":"+self.data["Minute"]
+        self.data = self.data.drop("Minute", 1)
