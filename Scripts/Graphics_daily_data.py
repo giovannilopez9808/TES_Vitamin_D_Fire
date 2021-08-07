@@ -8,17 +8,17 @@ def plot_daily_data(data_davis: pd.DataFrame, data_tuv: pd.DataFrame, parameters
     """
     plt.subplots(figsize=(8, 5))
     plt.plot(data_davis.index, data_davis["UV"],
-             label="UVI medido por estación meteológica",
-             color="#0077b6",
+             label="IUV medido por estación meteológica",
+             color="#9d0208",
              lw=2)
     plt.plot(data_tuv.index, data_tuv["UVI"],
-             label="UVI calculado por el modelo TUV",
-             color="#008000",
+             label="IUV calculado por el modelo TUV",
+             color="#000000",
              lw=2)
     ticks, hour_tick = obtain_tick(parameters["date initial"])
     plt.xlabel("Hora local (h)",
                fontsize=parameters["fontsize"])
-    plt.ylabel("UVI",
+    plt.ylabel("Índice UV",
                fontsize=parameters["fontsize"])
     plt.xticks(ticks, hour_tick,
                fontsize=parameters["fontsize"])
