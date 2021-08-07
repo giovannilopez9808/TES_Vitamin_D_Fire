@@ -119,7 +119,7 @@ class TUV_model:
     hora inicial, final, aod y fecha
     """
 
-    def __init__(self, path: str, date, ozone, aod, hour_i, hour_f, max_rows=60):
+    def __init__(self, path: str, date: pd.Timestamp, ozone: float, aod: float, hour_i: int, hour_f: int, max_rows: int):
         self.max_rows = max_rows
         self.hour_i = hour_i
         self.hour_f = hour_f
@@ -286,7 +286,7 @@ class Search_AOD:
                                           TUV_model_script.uvi)
         return TUV_model_results
 
-    def aod_binary_search(self, RD=10, run=True, print_bool=True):
+    def aod_binary_search(self, RD: float, run: bool, print_bool: bool):
         """
         Decision del cambio en los limites de la busqueda del AOD
         dependiendo la RD obtenida.
@@ -306,7 +306,7 @@ class Search_AOD:
         """
         self.aod = (self.aod_i_n+self.aod_f_n)/2
 
-    def excess_of_attempts(self, attempt=1, run=True):
+    def excess_of_attempts(self, attempt: int, run: bool):
         """
         Limite de intentos en el algoritmo de busqueda
         """
@@ -325,7 +325,7 @@ class Search_AOD:
         print(text)
         self.log.write("{}\n".format(text))
 
-    def print_date_results(self, RD=10, AOD=0.5, measurement=5, data=3):
+    def print_date_results(self, RD: float, AOD: float, measurement: float, data: float):
         """
         Escritura de los resultados en la terminal y en el .log
         """
@@ -357,7 +357,7 @@ class Write_Results:
         self.file_results.write("Date,Ozone,AOD,RD\n")
         self.file_results.close()
 
-    def write_AOD_results(self, date: pd.Timestamp, ozone=260.05, AOD=0.5, RD=10, print_bool=True):
+    def write_AOD_results(self, date: pd.Timestamp, ozone: float, AOD: float, RD: float, print_bool: bool):
         """
         Escritura de los resultados de ls busqueda de AOD
         """
@@ -373,31 +373,56 @@ class Write_Results:
 
 
 class TUV_results:
+    """
+    Lectura y formateo de los resultados del modelo TUV
+    """
+
     def __init__(self, path: str, file: str):
         self.path = path
         self.file = file
         self.read_data()
 
     def read_data(self):
+        """
+        Lectura de los datos a partir de un archivo
+        """
         self.data = pd.read_csv("{}{}".format(self.path,
                                               self.file))
+        # Obtiene la fecha a partir del nombre
         self.obtain_date_from_filename()
+        # Realiza formateo de las horas a timestamp
         self.format_data()
 
     def obtain_date_from_filename(self):
+        """
+        Obtiene la fecha a partir del nombre del archivo
+        """
         self.date = self.file.split("_")[0]
 
     def format_data(self):
+        """
+        Realiza el formato de los datos
+        """
         self.format_hour()
+        # Union de la fecha con la hora de cada resultado
         self.data.index = pd.to_datetime(self.date+" "+self.data["Hour"])
         self.data = self.data.drop("Hour", 1)
 
     def format_hour(self):
+        """
+        Formato de las horas en hh:mm
+        """
+        # Obtiene los minutos de la hora
         self.data["Minute"] = (self.data["Hour"]-self.data["Hour"]//1)*60
+        # Obtiene los mínutos en formato entero
         self.data["Minute"] = self.data["Minute"].round()
         self.data["Minute"] = self.data["Minute"].astype(int)
+        # Completa de ceros si es necesario
         self.data["Minute"] = self.data["Minute"].astype(str).str.zfill(2)
+        # Horas a formato entero
         self.data["Hour"] = self.data["Hour"].astype(int)
+        # Completa de ceros si es necesario
         self.data["Hour"] = self.data["Hour"].astype(str).str.zfill(2)
+        # Union de las horas con los minutos
         self.data["Hour"] = self.data["Hour"]+":"+self.data["Minute"]
         self.data = self.data.drop("Minute", 1)
