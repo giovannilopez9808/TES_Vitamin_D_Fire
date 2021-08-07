@@ -6,7 +6,7 @@ pd.options.mode.chained_assignment = None
 
 
 class Davis_data:
-    def __init__(self, path_data="", file_name="", day_initial="2000-01-01", day_final="2001-01-01"):
+    def __init__(self, path_data: str, file_name: str, day_initial: str, day_final: str):
         """
         Lectura de los datos de Davis recompilados.
 
@@ -67,7 +67,7 @@ class Davis_data:
 
 
 class OMI_data:
-    def __init__(self, path_data="", file_name="", day_initial="2000-01-01", day_final="2001-01-01"):
+    def __init__(self, path_data: str, file_name: str, day_initial: str, day_final: str):
         """
         Lectura de los datos de OMI recompilados.
 
@@ -119,7 +119,7 @@ class TUV_model:
     hora inicial, final, aod y fecha
     """
 
-    def __init__(self, path, date, ozone, aod, hour_i, hour_f, max_rows=60):
+    def __init__(self, path: str, date, ozone, aod, hour_i, hour_f, max_rows=60):
         self.max_rows = max_rows
         self.hour_i = hour_i
         self.hour_f = hour_f
@@ -192,7 +192,7 @@ class Search_AOD:
     de los resultados
     """
 
-    def __init__(self, TUV_path="", hours=[], ozone=250.02, date=pd.Timestamp(2000, 1, 1), aod_i=0, aod_f=1, RD=10, delta_RD=1, data=pd.DataFrame(), attempt_limit=10, write_results=""):
+    def __init__(self, TUV_path: str, hours: list, ozone: float, date: pd.Timestamp, aod_i: float, aod_f: float, RD: float, delta_RD: float, data: pd.DataFrame, attempt_limit: int, write_results: str):
         self.attempt_limit = attempt_limit
         self.write_results = write_results
         self.delta_RD = delta_RD
@@ -342,7 +342,7 @@ class Write_Results:
     Contiene los metodos para escribir los resultados de la busqueda del AOD
     """
 
-    def __init__(self, path=""):
+    def __init__(self, path: str):
         self.path = path
         self.write_AOD_results
         self.write_Header_Results_file()
@@ -357,7 +357,7 @@ class Write_Results:
         self.file_results.write("Date,Ozone,AOD,RD\n")
         self.file_results.close()
 
-    def write_AOD_results(self, date=pd.Timestamp(2000, 1, 1), ozone=260.05, AOD=0.5, RD=10, print_bool=True):
+    def write_AOD_results(self, date: pd.Timestamp, ozone=260.05, AOD=0.5, RD=10, print_bool=True):
         """
         Escritura de los resultados de ls busqueda de AOD
         """
@@ -381,16 +381,15 @@ class TUV_results:
     def read_data(self):
         self.data = pd.read_csv("{}{}".format(self.path,
                                               self.file))
-        date = self.obtain_date_from_filename()
-        self.format_data(date)
+        self.obtain_date_from_filename()
+        self.format_data()
 
     def obtain_date_from_filename(self):
-        date = self.file.split("_")[0]
-        return date
+        self.date = self.file.split("_")[0]
 
-    def format_data(self, date: str):
+    def format_data(self):
         self.format_hour()
-        self.data.index = pd.to_datetime(date+" "+self.data["Hour"])
+        self.data.index = pd.to_datetime(self.date+" "+self.data["Hour"])
         self.data = self.data.drop("Hour", 1)
 
     def format_hour(self):
