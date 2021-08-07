@@ -2,26 +2,36 @@ import matplotlib.pyplot as plt
 from Class_list import *
 
 
-def plot_daily_data(data_davis: pd.DataFrame, data_tuv: pd.DataFrame, date: str):
+def plot_daily_data(data_davis: pd.DataFrame, data_tuv: pd.DataFrame, parameters: dict):
     """
-    Funcion que plotea los datos diarios junto con el cloud factor
+    Funcion que plotea los datos junto con los resultados del TUV
     """
+    plt.subplots(figsize=(8, 5))
     plt.plot(data_davis.index, data_davis["UV"],
-             label="Davis")
+             label="UVI medido por estación meteológica",
+             color="#0077b6",
+             lw=2)
     plt.plot(data_tuv.index, data_tuv["UVI"],
-             label="TUV")
-    ticks, hour_tick = obtain_tick(date)
-    plt.xlabel("Time Local (h)")
-    plt.ylabel("UV Index")
-    plt.xticks(hour_tick, ticks)
-    plt.xlim(pd.to_datetime("{} 11:00".format(date)),
-             pd.to_datetime("{} 15:00".format(date)))
-    plt.ylim(0, 7)
-    plt.yticks(np.arange(0, 8))
+             label="UVI calculado por el modelo TUV",
+             color="#008000",
+             lw=2)
+    ticks, hour_tick = obtain_tick(parameters["date initial"])
+    plt.xlabel("Hora local (h)",
+               fontsize=parameters["fontsize"])
+    plt.ylabel("UVI",
+               fontsize=parameters["fontsize"])
+    plt.xticks(ticks, hour_tick,
+               fontsize=parameters["fontsize"])
+    plt.xlim(pd.to_datetime("{} 12:00".format(parameters["date initial"])),
+             pd.to_datetime("{} 14:00".format(parameters["date initial"])))
+    plt.ylim(2, 5)
+    plt.yticks(np.arange(2, 5.5, 0.5),
+               fontsize=parameters["fontsize"])
     plt.grid(ls="--",
              color="#000000",
              alpha=0.5)
-    plt.title("Fecha {}".format(date))
+    plt.title("Fecha {}".format(parameters["date initial"]),
+              fontsize=parameters["fontsize"])
     plt.subplots_adjust(top=0.879,
                         bottom=0.121,
                         left=0.097,
@@ -29,9 +39,11 @@ def plot_daily_data(data_davis: pd.DataFrame, data_tuv: pd.DataFrame, date: str)
                         hspace=0.2,
                         wspace=0.2)
     plt.legend(frameon=False,
-               ncol=2)
+               loc="lower center",
+               fontsize=parameters["fontsize"])
     plt.tight_layout()
-    plt.show()
+    plt.savefig("{}{}".format(parameters["path graphics"],
+                              parameters["graphics name"]))
 
 
 def obtain_tick(date: str):
@@ -41,7 +53,7 @@ def obtain_tick(date: str):
     # Hora inicial
     hour_i = 7
     # Hora final
-    hour_f = 20
+    hour_f = 19
     # Lista con los labels en el formato datetime
     hour_tick = []
     # Lista con las labels de las horas
@@ -49,20 +61,29 @@ def obtain_tick(date: str):
     for hour in range(hour_i,
                       hour_f):
         # Hora
-        ticks.append(hour)
-        hour = str(hour).zfill(2)
-        # Formato de datetime
-        hour_tick.append(pd.to_datetime("{} {}:00".format(date,
-                                                          hour)))
+        hour_str = str(hour).zfill(2)
+        for minute in [0, 15, 30, 45]:
+            minute_str = str(minute).zfill(2)
+            # Formato de datetime
+            date_str = "{} {}:{}".format(date,
+                                         hour_str,
+                                         minute_str)
+            date_with_time = pd.to_datetime(date_str)
+            ticks.append(date_with_time)
+            time = date_with_time.strftime("%H:%M")
+            hour_tick.append(time)
     return ticks, hour_tick
 
 
 parameters = {
     "path data": "../Data/",
     "path TUV": "../Results/TUV/",
+    "path graphics": "../Graphics/",
+    "graphics name": "daily_data.png",
     "file Davis": "data_Davis.csv",
     "date initial": "2020-08-15",
     "date final": "2020-08-28",
+    "fontsize": 13,
     "dataset": {"AOD": "Binary search",
                 "Ozone": "260"}
 }
@@ -81,4 +102,4 @@ TUV = TUV_results(parameters["path TUV"],
 # Ploteo de los datos diarios
 plot_daily_data(Davis_daily_data,
                 TUV.data,
-                parameters["date initial"])
+                parameters)
