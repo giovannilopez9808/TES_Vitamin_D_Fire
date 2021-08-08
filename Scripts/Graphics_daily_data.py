@@ -8,7 +8,7 @@ def plot_daily_data(data_davis: pd.DataFrame, data_tuv: pd.DataFrame, parameters
     """
     plt.subplots(figsize=(8, 5))
     plt.plot(data_davis.index, data_davis["UV"],
-             label="IUV medido por estación meteológica",
+             label="IUV medido por estación meteorológica",
              color="#9d0208",
              lw=2)
     plt.plot(data_tuv.index, data_tuv["UVI"],
