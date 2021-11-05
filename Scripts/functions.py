@@ -88,7 +88,7 @@ def format_data(data: pd.DataFrame):
     Formato de la columna de Date en formato `pd.Timestamp`
     """
     data.index = pd.to_datetime(data["Date"])
-    data = data.drop("Date", 1)
+    data = data.drop(columns="Date")
     return data
 
 
