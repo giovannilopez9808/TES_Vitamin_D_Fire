@@ -28,7 +28,7 @@ parameters = {"path data": "../Data/",
                                      #                "Title": "Clean"},
                                      "dataset 4": {"AOD": "0.30",
                                                    "Ozone": "OMI",
-                                                   "Color": "#e85d04",
+                                                   "Color": "#4361ee",
                                                    "Title": "TES en condiciones normales", },
                                      },
               }
@@ -48,15 +48,15 @@ for i, dataset in enumerate(parameters["dataset parameters"]):
 data = read_data(parameters["path data"],
                  parameters["file Fire data"])
 ax2.plot(data.index, data["NI"],
-         label="Incendios detectados",
-         color="#560bad",
+         label="Focos de incendios",
+         color="#ae2012",
          marker="o"
          )
 ax1.set_xlim(pd.to_datetime(parameters["date initial"]),
              pd.to_datetime(parameters["date final"]))
 ax1.set_ylabel("TES (minutos)",
                fontsize=parameters["fontsize"])
-ax2.set_ylabel("Incendios diarios",
+ax2.set_ylabel("Focos de incendios diarios",
                fontsize=parameters["fontsize"],
                rotation=-90,
                labelpad=20)
@@ -75,3 +75,4 @@ fig.tight_layout()
 plt.savefig("{}{}".format(parameters["path graphics"],
                           parameters["graphics name"]),
             dpi=400)
+plt.show()
